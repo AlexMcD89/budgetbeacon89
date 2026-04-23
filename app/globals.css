@@ -117,14 +117,66 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@layer components {
+  .btn {
+    @apply rounded-2xl border px-4 py-2 text-sm;
+  }
+
+  .input {
+    @apply mt-2 h-12 w-full rounded-2xl border px-4;
+  }
+
+  .label {
+    @apply text-sm font-medium;
+  }
+
+  .label-sm {
+    @apply text-sm text-slate-500;
+  }
+
+  .value {
+    @apply text-3xl font-semibold;
+  }
+
+  .card {
+    @apply rounded-3xl border p-5 bg-white;
+  }
+
+  .card-dark {
+    @apply rounded-3xl bg-slate-900 text-white p-6;
+  }
+
+  .icon {
+    @apply h-5 w-5 mb-2;
+  }
+
+  .title {
+    @apply text-xl font-semibold;
+  }
+
+  .desc {
+    @apply text-sm text-slate-300 mt-2;
+  }
+
+  .btn-dark {
+    @apply bg-slate-900 text-white px-5 py-3 rounded-2xl text-sm;
+  }
+
+  .btn-outline {
+    @apply border px-5 py-3 rounded-2xl text-sm;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+
   html {
     @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }
