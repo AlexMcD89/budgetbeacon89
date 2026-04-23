@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { Calculator, Menu, PoundSterling } from "lucide-react";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "BudgetBeacon | UK Money Tools & Calculators",
@@ -225,6 +226,20 @@ export default function RootLayout({
   return (
     <html lang="en-GB">
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WDC8XDXNYS"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-WDC8XDXNYS');
+          `}
+        </Script>
+
         <div className="flex min-h-screen flex-col">
           <Header />
           <div className="flex-1">{children}</div>
