@@ -239,7 +239,11 @@ export default function RootLayout({
             gtag('config', 'G-L4YL4JME4X');
           `}
         </Script>
-
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4223223139387700"
+          crossOrigin="anonymous"
+        ></script>
         <div className="flex min-h-screen flex-col">
           <Header />
           <div className="flex-1">{children}</div>
