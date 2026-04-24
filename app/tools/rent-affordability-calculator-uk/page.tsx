@@ -26,16 +26,30 @@ function calculateMonthlyTakeHome(
   studentLoan: boolean,
 ) {
   const personalAllowance = 12570;
+  const basicRateLimit = 50270;
+  const higherRateLimit = 125140;
+
+  const pension = annualSalary * (pensionPct / 100);
   const taxableIncome = Math.max(0, annualSalary - personalAllowance);
 
-  const basicBand = Math.min(taxableIncome, 37700);
-  const higherBand = Math.max(0, taxableIncome - 37700);
+  const basicBand = Math.min(taxableIncome, basicRateLimit - personalAllowance);
+  const higherBand = Math.min(
+    Math.max(0, annualSalary - basicRateLimit),
+    higherRateLimit - basicRateLimit,
+  );
+  const additionalBand = Math.max(0, annualSalary - higherRateLimit);
 
-  const incomeTax = basicBand * 0.2 + higherBand * 0.4;
-  const nationalInsurance = Math.max(0, annualSalary - 12570) * 0.08;
-  const pension = annualSalary * (pensionPct / 100);
+  const incomeTax = basicBand * 0.2 + higherBand * 0.4 + additionalBand * 0.45;
+
+  const niMainBand = Math.min(Math.max(0, annualSalary - 12570), 50270 - 12570);
+  const niUpperBand = Math.max(0, annualSalary - 50270);
+
+  const nationalInsurance = niMainBand * 0.08 + niUpperBand * 0.02;
+
+  // Simplified student loan estimate. Actual thresholds vary by plan.
+  const studentLoanThreshold = 25000;
   const studentLoanRepayment = studentLoan
-    ? Math.max(0, annualSalary - 27295) * 0.09
+    ? Math.max(0, annualSalary - studentLoanThreshold) * 0.09
     : 0;
 
   const annualTakeHome =
@@ -56,7 +70,6 @@ function calculateMonthlyTakeHome(
     },
   };
 }
-
 export default function RentAffordabilityCalculatorPage() {
   const [salary, setSalary] = useState(42000);
   const [partnerSalary, setPartnerSalary] = useState(0);
@@ -317,6 +330,34 @@ export default function RentAffordabilityCalculatorPage() {
                 {studentLoan ? "On" : "Off"}
               </button>
             </div>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/take-home-pay-calculator-uk"
+                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Check your take-home pay
+                </Link>
+
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Build a monthly budget
+                </Link>
+
+                <Link
+                  href="/guides/how-much-rent-can-i-afford-uk"
+                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Read the rent affordability guide
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -567,7 +608,69 @@ export default function RentAffordabilityCalculatorPage() {
           </div>
         </div>
       </section>
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How much rent can I afford in the UK?
+          </h2>
 
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              A common rent affordability benchmark is to keep rent around 30%
+              to 35% of monthly take-home pay. In practice, the right rent level
+              depends on more than income alone. Debt repayments, bills,
+              commuting costs, council tax, savings goals and the cost of living
+              in your area all affect what feels affordable.
+            </p>
+
+            <p className="leading-7">
+              This calculator is designed to give a more realistic view by
+              comparing your target rent against estimated take-home pay and
+              regular monthly commitments. That makes it more useful than a
+              simple salary multiple or flat percentage rule.
+            </p>
+
+            <p className="leading-7">
+              If your rent share is high but you still have plenty of money left
+              after bills and debt payments, it may be manageable. If your rent
+              share is high and your remaining monthly buffer is low, the same
+              rent could feel much more stretched.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div className="rounded-3xl bg-slate-100 p-5">
+              <p className="text-lg font-semibold text-slate-900">
+                Safer range
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Often closer to 30% of take-home pay, leaving more room for
+                bills, savings and unexpected costs.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-slate-100 p-5">
+              <p className="text-lg font-semibold text-slate-900">
+                Balanced range
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                A middle-ground estimate that may work for many renters if other
+                monthly commitments are controlled.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-slate-100 p-5">
+              <p className="text-lg font-semibold text-slate-900">
+                Stretch range
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                May be possible, but usually leaves less breathing room and
+                higher risk if costs rise.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       <RelatedLinks
         heading="Related next steps"
         links={[
