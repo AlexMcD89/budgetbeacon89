@@ -5,11 +5,15 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarClock,
+  CircleHelp,
   CreditCard,
   Flame,
   PoundSterling,
   ShieldCheck,
 } from "lucide-react";
+import RelatedLinks from "@/components/related-links";
+import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -20,6 +24,8 @@ function formatGBP(value: number) {
 }
 
 function formatMonths(months: number) {
+  if (!Number.isFinite(months)) return "Not clearing";
+
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
 
@@ -44,6 +50,7 @@ function snowballPayoff(debts: Debt[], extraPayment: number) {
   let months = 0;
   let totalInterest = 0;
   let availableExtra = extraPayment;
+
   const payoffOrder: {
     name: string;
     month: number;
@@ -61,7 +68,9 @@ function snowballPayoff(debts: Debt[], extraPayment: number) {
       totalInterest += interest;
     }
 
-    const targetDebt = activeDebts.sort((a, b) => a.remaining - b.remaining)[0];
+    const targetDebt = [...activeDebts].sort(
+      (a, b) => a.remaining - b.remaining,
+    )[0];
 
     for (const debt of activeDebts) {
       let payment = debt.minimumPayment;
@@ -209,7 +218,7 @@ export default function DebtSnowballCalculatorPage() {
     }
 
     if (snowballPlan.months > 60) {
-      status = "Long journey";
+      status = "Longer payoff journey";
       summary =
         "This plan works, but the payoff journey may still be long. Increasing the extra payment could make a noticeable difference.";
     }
@@ -276,130 +285,167 @@ export default function DebtSnowballCalculatorPage() {
               Debt tool
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Debt Snowball Calculator
+              Debt Snowball Calculator UK
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Plan a debt snowball strategy by paying off the smallest balance
-              first, then rolling each cleared payment into the next debt.
+              first, then rolling each cleared payment into the next debt. This
+              calculator estimates payoff order, debt-free date, interest saved
+              and time saved.
             </p>
           </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("small")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Smaller debts
-              </button>
-              <button
-                onClick={() => applyScenario("mixed")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Mixed debts
-              </button>
-              <button
-                onClick={() => applyScenario("heavy")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Heavier debt
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("small")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Smaller debts
+                </button>
 
-            <div className="mt-8 space-y-6">
-              <DebtInput
-                title="Debt 1"
-                balance={debt1Balance}
-                apr={debt1Apr}
-                payment={debt1Payment}
-                setBalance={setDebt1Balance}
-                setApr={setDebt1Apr}
-                setPayment={setDebt1Payment}
-              />
+                <button
+                  onClick={() => applyScenario("mixed")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Mixed debts
+                </button>
 
-              <DebtInput
-                title="Debt 2"
-                balance={debt2Balance}
-                apr={debt2Apr}
-                payment={debt2Payment}
-                setBalance={setDebt2Balance}
-                setApr={setDebt2Apr}
-                setPayment={setDebt2Payment}
-              />
+                <button
+                  onClick={() => applyScenario("heavy")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Heavier debt
+                </button>
+              </div>
 
-              <DebtInput
-                title="Debt 3"
-                balance={debt3Balance}
-                apr={debt3Apr}
-                payment={debt3Payment}
-                setBalance={setDebt3Balance}
-                setApr={setDebt3Apr}
-                setPayment={setDebt3Payment}
-              />
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Extra monthly snowball payment (£)
-                </label>
-                <input
-                  type="number"
-                  value={extraPayment}
-                  onChange={(e) => setExtraPayment(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+              <div className="mt-8 space-y-6">
+                <DebtInput
+                  title="Debt 1"
+                  balance={debt1Balance}
+                  apr={debt1Apr}
+                  payment={debt1Payment}
+                  setBalance={setDebt1Balance}
+                  setApr={setDebt1Apr}
+                  setPayment={setDebt1Payment}
                 />
+
+                <DebtInput
+                  title="Debt 2"
+                  balance={debt2Balance}
+                  apr={debt2Apr}
+                  payment={debt2Payment}
+                  setBalance={setDebt2Balance}
+                  setApr={setDebt2Apr}
+                  setPayment={setDebt2Payment}
+                />
+
+                <DebtInput
+                  title="Debt 3"
+                  balance={debt3Balance}
+                  apr={debt3Apr}
+                  payment={debt3Payment}
+                  setBalance={setDebt3Balance}
+                  setApr={setDebt3Apr}
+                  setPayment={setDebt3Payment}
+                />
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Extra monthly snowball payment (£)
+                  </label>
+                  <input
+                    type="number"
+                    value={extraPayment}
+                    onChange={(e) => setExtraPayment(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  How the snowball method works
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  The calculator targets the smallest balance first. Once that
+                  debt is cleared, its minimum payment rolls into the next
+                  smallest remaining debt, creating a larger snowball payment.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                How the snowball method works
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                The calculator targets the smallest balance first. Once that
-                debt is cleared, its minimum payment rolls into the next
-                smallest remaining debt, creating a larger and larger snowball
-                payment.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/guides/debt-snowball-vs-avalanche-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare snowball vs avalanche
+                </Link>
+
+                <Link
+                  href="/tools/debt-payoff-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Use the general debt payoff calculator
+                </Link>
+
+                <Link
+                  href="/tools/credit-card-interest-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check credit card interest
+                </Link>
+
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Find extra money in your budget
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <CreditCard className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Total debt</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.totalDebt)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Combined starting balance across all debts.
-                </p>
-              </div>
+              <ResultCard
+                icon={<CreditCard className="h-5 w-5" />}
+                label="Total debt"
+                value={formatGBP(result.totalDebt)}
+                description="Combined starting balance across all debts."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <CalendarClock className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Debt-free in</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatMonths(result.snowballPlan.months)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Estimated payoff time using the snowball strategy.
-                </p>
-              </div>
+              <ResultCard
+                icon={<CalendarClock className="h-5 w-5" />}
+                label="Debt-free in"
+                value={formatMonths(result.snowballPlan.months)}
+                description="Estimated payoff time using the snowball strategy."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 Snowball summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <Flame className="h-5 w-5" />
@@ -418,23 +464,15 @@ export default function DebtSnowballCalculatorPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Interest saved vs minimums
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.interestSaved)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Interest saved vs minimums"
+                  value={formatGBP(result.interestSaved)}
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Time saved vs minimums
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatMonths(result.monthsSaved)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Time saved vs minimums"
+                  value={formatMonths(result.monthsSaved)}
+                />
               </div>
             </div>
 
@@ -480,6 +518,58 @@ export default function DebtSnowballCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How the debt snowball method works
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              The debt snowball method focuses on clearing the smallest balance
+              first while keeping minimum payments going on the other debts.
+              Once the smallest debt is cleared, the money that was going to
+              that debt is rolled into the next smallest balance.
+            </p>
+
+            <p className="leading-7">
+              The main benefit is momentum. Clearing one debt can make progress
+              feel more visible, which may help some people stay consistent. The
+              trade-off is that it does not always minimise total interest
+              compared with targeting the highest APR first.
+            </p>
+
+            <p className="leading-7">
+              This calculator gives a general estimate only. Real interest,
+              fees, promotional rates and lender rules can change the exact
+              outcome.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Smallest balance first"
+              text="The snowball method starts with the debt that has the lowest balance."
+            />
+            <InfoCard
+              title="Roll payments forward"
+              text="When one debt clears, its minimum payment is added to the next target debt."
+            />
+            <InfoCard
+              title="Momentum focused"
+              text="The goal is to make progress feel visible and easier to maintain."
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-6 md:px-6">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
@@ -488,54 +578,44 @@ export default function DebtSnowballCalculatorPage() {
             </h2>
             <div className="mt-5 space-y-4 text-slate-600">
               <p className="leading-7">
-                Use the payoff order as a practical plan. Focus on the smallest
-                balance first while keeping minimum payments going on the
-                others.
+                Use the payoff order as a practical estimate. Focus on the
+                smallest balance first while keeping minimum payments going on
+                the others.
               </p>
               <p className="leading-7">
-                Once the first debt is cleared, do not absorb that freed-up
-                money into everyday spending. Roll it into the next debt to
-                build momentum.
+                Once the first debt is cleared, avoid absorbing that freed-up
+                money into everyday spending. Rolling it into the next debt is
+                what creates the snowball effect.
               </p>
               <p className="leading-7">
                 This calculator gives estimates only and does not provide
-                financial advice.
+                personal financial advice.
               </p>
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Debt snowball calculator FAQs
+            </h2>
+
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  What is the debt snowball method?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  It is a payoff method where you clear the smallest debt first,
-                  then roll that payment into the next smallest debt.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Is snowball better than avalanche?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Snowball is often better for motivation. Avalanche usually
-                  saves more interest because it targets the highest APR first.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Should I still make minimum payments?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Yes. The snowball method assumes minimum payments continue on
-                  all debts while extra money targets one debt at a time.
-                </p>
-              </div>
+              <FAQ
+                question="What is the debt snowball method?"
+                answer="It is a payoff method where you clear the smallest debt first, then roll that payment into the next smallest debt."
+              />
+              <FAQ
+                question="Is snowball better than avalanche?"
+                answer="Snowball is often better for motivation. Avalanche usually saves more interest because it targets the highest APR first."
+              />
+              <FAQ
+                question="Should I still make minimum payments?"
+                answer="Yes. The snowball method assumes minimum payments continue on all debts while extra money targets one debt at a time."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. This calculator gives a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -568,6 +648,38 @@ export default function DebtSnowballCalculatorPage() {
           </div>
         </div>
       </section>
+
+      <RelatedLinks
+        heading="Related debt tools and guides"
+        links={[
+          {
+            title: "Debt Payoff Calculator",
+            description:
+              "Estimate payoff time, interest and the effect of extra payments.",
+            href: "/tools/debt-payoff-calculator",
+          },
+          {
+            title: "Credit Card Interest Calculator",
+            description:
+              "Estimate credit card interest based on balance, APR and payment.",
+            href: "/tools/credit-card-interest-calculator",
+          },
+          {
+            title: "Monthly Budget Planner",
+            description:
+              "Find out how much extra money could go towards debt each month.",
+            href: "/tools/monthly-budget-planner",
+          },
+          {
+            title: "Debt Snowball vs Avalanche UK",
+            description:
+              "Compare the two main debt payoff strategies in plain English.",
+            href: "/guides/debt-snowball-vs-avalanche-uk",
+          },
+        ]}
+      />
+
+      <ToolDisclaimer />
     </main>
   );
 }
@@ -594,41 +706,94 @@ function DebtInput({
       <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-3">
-        <div>
-          <label className="text-sm font-medium text-slate-700">
-            Balance (£)
-          </label>
-          <input
-            type="number"
-            value={balance}
-            onChange={(e) => setBalance(Number(e.target.value))}
-            className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-slate-700">APR %</label>
-          <input
-            type="number"
-            step="0.1"
-            value={apr}
-            onChange={(e) => setApr(Number(e.target.value))}
-            className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-slate-700">
-            Minimum payment (£)
-          </label>
-          <input
-            type="number"
-            value={payment}
-            onChange={(e) => setPayment(Number(e.target.value))}
-            className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-          />
-        </div>
+        <InputField label="Balance (£)" value={balance} onChange={setBalance} />
+        <InputField label="APR %" value={apr} onChange={setApr} step="0.1" />
+        <InputField
+          label="Minimum payment (£)"
+          value={payment}
+          onChange={setPayment}
+        />
       </div>
+    </div>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
     </div>
   );
 }
