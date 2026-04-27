@@ -5,10 +5,14 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarClock,
+  CircleHelp,
   PiggyBank,
   PoundSterling,
   ShieldCheck,
 } from "lucide-react";
+import RelatedLinks from "@/components/related-links";
+import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -19,6 +23,8 @@ function formatGBP(value: number) {
 }
 
 function formatMonths(months: number) {
+  if (!Number.isFinite(months)) return "Not on track";
+
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
 
@@ -123,13 +129,6 @@ export default function SavingsGoalCalculatorPage() {
       annualRate,
     );
 
-    const deadlinePlan = monthsToReachGoal(
-      currentSavings,
-      goalAmount,
-      neededForDeadline,
-      annualRate,
-    );
-
     const extraNeeded = Math.max(0, neededForDeadline - monthlySaving);
 
     let status = "On track";
@@ -155,7 +154,6 @@ export default function SavingsGoalCalculatorPage() {
       remaining,
       progress: Math.min(100, progress),
       neededForDeadline,
-      deadlinePlan,
       extraNeeded,
       status,
       summary,
@@ -197,7 +195,7 @@ export default function SavingsGoalCalculatorPage() {
               Savings tool
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Savings Goal Calculator
+              Savings Goal Calculator UK
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Work out how long it could take to reach a savings goal, how much
@@ -208,142 +206,133 @@ export default function SavingsGoalCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("emergency")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Emergency fund
-              </button>
-              <button
-                onClick={() => applyScenario("house")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                House deposit
-              </button>
-              <button
-                onClick={() => applyScenario("holiday")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Holiday goal
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("emergency")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Emergency fund
+                </button>
+                <button
+                  onClick={() => applyScenario("house")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  House deposit
+                </button>
+                <button
+                  onClick={() => applyScenario("holiday")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Holiday goal
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Savings goal (£)
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Savings goal (£)"
                   value={goalAmount}
-                  onChange={(e) => setGoalAmount(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setGoalAmount}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Current savings (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Current savings (£)"
                   value={currentSavings}
-                  onChange={(e) => setCurrentSavings(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setCurrentSavings}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly saving (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly saving (£)"
                   value={monthlySaving}
-                  onChange={(e) => setMonthlySaving(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMonthlySaving}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Interest / growth rate %
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
+                <InputField
+                  label="Interest / growth rate %"
                   value={annualRate}
-                  onChange={(e) => setAnnualRate(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setAnnualRate}
+                  step="0.1"
                 />
+                <div className="sm:col-span-2">
+                  <InputField
+                    label="Target timeframe (months)"
+                    value={targetMonths}
+                    onChange={setTargetMonths}
+                  />
+                </div>
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Target timeframe (months)
-                </label>
-                <input
-                  type="number"
-                  value={targetMonths}
-                  onChange={(e) => setTargetMonths(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this tool helps with
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Use this calculator to compare your current monthly saving
+                  amount with the amount needed to hit your goal by a chosen
+                  deadline. It is a planning estimate only.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                What this tool helps with
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Use this calculator to compare your current monthly saving
-                amount with the amount needed to hit your goal by a chosen
-                deadline.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <QuickLink
+                  href="/tools/monthly-budget-planner"
+                  label="Find room in your monthly budget"
+                />
+                <QuickLink
+                  href="/tools/emergency-fund-calculator"
+                  label="Check your emergency fund target"
+                />
+                <QuickLink
+                  href="/tools/compound-interest-calculator"
+                  label="Compare compound growth"
+                />
+                <QuickLink
+                  href="/tools/isa-savings-calculator"
+                  label="Plan ISA savings"
+                />
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <CalendarClock className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Time to reach goal
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {result.payoff.impossible
+              <ResultCard
+                icon={<CalendarClock className="h-5 w-5" />}
+                label="Time to reach goal"
+                value={
+                  result.payoff.impossible
                     ? "Not on track"
-                    : formatMonths(result.payoff.months)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on your current monthly saving amount.
-                </p>
-              </div>
+                    : formatMonths(result.payoff.months)
+                }
+                description="Based on your current monthly saving amount."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Monthly needed</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.neededForDeadline)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Estimated monthly saving needed for your target timeframe.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Monthly needed"
+                value={formatGBP(result.neededForDeadline)}
+                description="Estimated monthly saving needed for your target timeframe."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 Goal summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -368,23 +357,14 @@ export default function SavingsGoalCalculatorPage() {
               </div>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Remaining to save
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.remaining)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Extra needed/month
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.extraNeeded)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Remaining to save"
+                  value={formatGBP(result.remaining)}
+                />
+                <SummaryBox
+                  label="Extra needed/month"
+                  value={formatGBP(result.extraNeeded)}
+                />
               </div>
             </div>
 
@@ -394,40 +374,23 @@ export default function SavingsGoalCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Current monthly saving
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(monthlySaving)}
-                  </p>
-                </div>
+                <InfoRow
+                  label="Current monthly saving"
+                  value={formatGBP(monthlySaving)}
+                  text="The amount you currently plan to put towards the goal each month."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Needed for target deadline
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.neededForDeadline)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This is the estimated monthly amount needed to hit the goal
-                    in {targetMonths} months.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Needed for target deadline"
+                  value={formatGBP(result.neededForDeadline)}
+                  text={`Estimated monthly amount needed to hit the goal in ${targetMonths} months.`}
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Estimated interest / growth earned
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.payoff.interestEarned)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This assumes the interest or growth rate you entered remains
-                    the same, which may not happen in real life.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Estimated interest / growth earned"
+                  value={formatGBP(result.payoff.interestEarned)}
+                  text="This assumes the interest or growth rate entered stays the same, which may not happen."
+                />
               </div>
             </div>
 
@@ -445,6 +408,58 @@ export default function SavingsGoalCalculatorPage() {
                 your budget.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How to reach a savings goal
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              The simplest way to plan a savings goal is to compare the amount
+              still needed with the time available. If you need £6,000 in 24
+              months, the starting point is around £250 per month before any
+              interest or growth.
+            </p>
+
+            <p className="leading-7">
+              Interest can help, but it is usually safer not to rely too heavily
+              on growth for short-term or essential goals. For important goals,
+              such as an emergency fund or house deposit, a realistic monthly
+              saving amount matters more than an optimistic growth assumption.
+            </p>
+
+            <p className="leading-7">
+              If the required monthly amount is too high, the main options are
+              increasing your monthly saving, extending the deadline, lowering
+              the goal, or reviewing your budget for possible savings.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Goal amount"
+              text="The total amount you want to save, such as a deposit, holiday or emergency fund."
+            />
+            <InfoCard
+              title="Monthly saving"
+              text="The regular amount you can realistically set aside each month."
+            />
+            <InfoCard
+              title="Timeframe"
+              text="The deadline has a big effect on how much you need to save monthly."
+            />
           </div>
         </div>
       </section>
@@ -473,37 +488,27 @@ export default function SavingsGoalCalculatorPage() {
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Savings goal calculator FAQs
+            </h2>
+
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  How much should I save each month?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  It depends on your goal amount, deadline, current savings, and
-                  how much room you have in your monthly budget.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Should I include interest or growth?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  You can include a cautious estimate, but avoid relying too
-                  heavily on growth if the goal is short term or essential.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  What if I am behind target?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  You can increase monthly savings, extend the deadline, lower
-                  the goal, or use a budget planner to find spare cash.
-                </p>
-              </div>
+              <FAQ
+                question="How much should I save each month?"
+                answer="It depends on your goal amount, deadline, current savings, and how much room you have in your monthly budget."
+              />
+              <FAQ
+                question="Should I include interest or growth?"
+                answer="You can include a cautious estimate, but avoid relying too heavily on growth if the goal is short term or essential."
+              />
+              <FAQ
+                question="What if I am behind target?"
+                answer="You can increase monthly savings, extend the deadline, lower the goal, or use a budget planner to find spare cash."
+              />
+              <FAQ
+                question="Is this financial advice?"
+                answer="No. This calculator gives a general estimate only and should not be treated as financial advice."
+              />
             </div>
           </div>
         </div>
@@ -511,31 +516,179 @@ export default function SavingsGoalCalculatorPage() {
 
       <section className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-6">
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/tools/monthly-budget-planner"
-              className="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
-            >
-              Budget planner
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
+                Next step
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+                Make the goal fit your monthly budget
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+                A useful next step is checking whether the monthly amount needed
+                fits your income, bills, debts and everyday spending.
+              </p>
+            </div>
 
-            <Link
-              href="/tools/compound-interest-calculator"
-              className="inline-flex items-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-            >
-              Compound interest
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/tools/monthly-budget-planner"
+                className="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+              >
+                Budget planner
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
 
-            <Link
-              href="/tools/isa-savings-calculator"
-              className="inline-flex items-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-            >
-              ISA savings
-            </Link>
+              <Link
+                href="/tools/emergency-fund-calculator"
+                className="inline-flex items-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+              >
+                Emergency fund
+              </Link>
+            </div>
           </div>
         </div>
       </section>
+
+      <RelatedLinks
+        heading="Related savings tools"
+        links={[
+          {
+            title: "Monthly Budget Planner",
+            description:
+              "See whether your savings goal fits into your monthly plan.",
+            href: "/tools/monthly-budget-planner",
+          },
+          {
+            title: "Emergency Fund Calculator",
+            description: "Work out how much emergency savings you may need.",
+            href: "/tools/emergency-fund-calculator",
+          },
+          {
+            title: "Compound Interest Calculator",
+            description:
+              "See how regular saving and compound growth may build over time.",
+            href: "/tools/compound-interest-calculator",
+          },
+          {
+            title: "ISA Savings Calculator",
+            description:
+              "Plan savings using the annual ISA allowance as a reference.",
+            href: "/tools/isa-savings-calculator",
+          },
+        ]}
+      />
+
+      <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function QuickLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+    >
+      {label}
+    </Link>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+  text,
+}: {
+  label: string;
+  value: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
