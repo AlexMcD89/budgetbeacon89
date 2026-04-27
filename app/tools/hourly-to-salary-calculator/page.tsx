@@ -4,11 +4,15 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
+  CircleHelp,
   Clock,
   PoundSterling,
   ShieldCheck,
   Wallet,
 } from "lucide-react";
+import RelatedLinks from "@/components/related-links";
+import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -24,16 +28,27 @@ function estimateTakeHome(
   studentLoan: boolean,
 ) {
   const personalAllowance = 12570;
+  const basicRateLimit = 50270;
+  const additionalRateLimit = 125140;
+
+  const pension = annualSalary * (pensionPct / 100);
   const taxableIncome = Math.max(0, annualSalary - personalAllowance);
 
-  const basicBand = Math.min(taxableIncome, 37700);
-  const higherBand = Math.max(0, taxableIncome - 37700);
+  const basicBand = Math.min(taxableIncome, basicRateLimit - personalAllowance);
+  const higherBand = Math.min(
+    Math.max(0, annualSalary - basicRateLimit),
+    additionalRateLimit - basicRateLimit,
+  );
+  const additionalBand = Math.max(0, annualSalary - additionalRateLimit);
 
-  const incomeTax = basicBand * 0.2 + higherBand * 0.4;
-  const nationalInsurance = Math.max(0, annualSalary - 12570) * 0.08;
-  const pension = annualSalary * (pensionPct / 100);
+  const incomeTax = basicBand * 0.2 + higherBand * 0.4 + additionalBand * 0.45;
+
+  const niMainBand = Math.min(Math.max(0, annualSalary - 12570), 50270 - 12570);
+  const niUpperBand = Math.max(0, annualSalary - 50270);
+  const nationalInsurance = niMainBand * 0.08 + niUpperBand * 0.02;
+
   const studentLoanRepayment = studentLoan
-    ? Math.max(0, annualSalary - 27295) * 0.09
+    ? Math.max(0, annualSalary - 25000) * 0.09
     : 0;
 
   const totalDeductions =
@@ -79,7 +94,7 @@ export default function HourlyToSalaryPage() {
 
   const applyScenario = (type: "minimum" | "average" | "high") => {
     if (type === "minimum") {
-      setHourlyRate(11.44);
+      setHourlyRate(12.21);
       setHoursPerWeek(40);
       setWeeksPerYear(52);
       setPensionPct(5);
@@ -112,171 +127,172 @@ export default function HourlyToSalaryPage() {
               Income tool
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Hourly to Salary Calculator (UK)
+              Hourly to Salary Calculator UK
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Convert hourly pay into estimated weekly, monthly, and annual
-              salary, with an estimated take-home pay view after tax, National
-              Insurance, pension, and optional student loan repayments.
+              Convert hourly pay into estimated weekly, monthly and annual
+              salary, with an estimated take-home pay view after income tax,
+              National Insurance, pension contributions and optional student
+              loan repayments.
             </p>
           </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("minimum")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Minimum wage
-              </button>
-              <button
-                onClick={() => applyScenario("average")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Average
-              </button>
-              <button
-                onClick={() => applyScenario("high")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Higher rate
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("minimum")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Minimum wage
+                </button>
+                <button
+                  onClick={() => applyScenario("average")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Average
+                </button>
+                <button
+                  onClick={() => applyScenario("high")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Higher rate
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Hourly rate (£)
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Hourly rate (£)"
                   value={hourlyRate}
-                  onChange={(e) => setHourlyRate(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setHourlyRate}
+                  step="0.01"
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Hours per week
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Hours per week"
                   value={hoursPerWeek}
-                  onChange={(e) => setHoursPerWeek(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setHoursPerWeek}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Weeks per year
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Weeks per year"
                   value={weeksPerYear}
-                  onChange={(e) => setWeeksPerYear(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setWeeksPerYear}
+                />
+                <InputField
+                  label="Pension contribution %"
+                  value={pensionPct}
+                  onChange={setPensionPct}
                 />
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Pension contribution %
-                </label>
-                <input
-                  type="number"
-                  value={pensionPct}
-                  onChange={(e) => setPensionPct(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
+                <div>
+                  <p className="text-sm font-medium text-slate-900">
+                    Include student loan repayments
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Toggle this on for a broader take-home estimate.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setStudentLoan(!studentLoan)}
+                  className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
+                    studentLoan
+                      ? "bg-slate-900 text-white hover:bg-slate-800"
+                      : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  {studentLoan ? "On" : "Off"}
+                </button>
+              </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this estimate includes
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This calculator estimates salary from hourly pay and includes
+                  simplified UK income tax, National Insurance, pension and
+                  optional student loan deductions. It is for general planning,
+                  not payroll advice.
+                </p>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
-              <div>
-                <p className="text-sm font-medium text-slate-900">
-                  Include student loan repayments
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Toggle this on for a more realistic take-home estimate.
-                </p>
-              </div>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
 
-              <button
-                onClick={() => setStudentLoan(!studentLoan)}
-                className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
-                  studentLoan
-                    ? "bg-slate-900 text-white hover:bg-slate-800"
-                    : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                }`}
-              >
-                {studentLoan ? "On" : "Off"}
-              </button>
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/take-home-pay-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Calculate take-home pay from salary
+                </Link>
+                <Link
+                  href="/tools/overtime-pay-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Estimate overtime pay
+                </Link>
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Build a monthly budget
+                </Link>
+                <Link
+                  href="/tools/rent-affordability-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check rent affordability
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Annual gross salary
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.annualGross)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Before tax and other deductions.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Annual gross salary"
+                value={formatGBP(result.annualGross)}
+                description="Before tax and other deductions."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Clock className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Monthly gross salary
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.monthlyGross)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Estimated monthly gross income.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Clock className="h-5 w-5" />}
+                label="Monthly gross salary"
+                value={formatGBP(result.monthlyGross)}
+                description="Estimated monthly gross income."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Wallet className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Annual take-home</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.annualTakeHome)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Estimated after key deductions.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Wallet className="h-5 w-5" />}
+                label="Annual take-home"
+                value={formatGBP(result.annualTakeHome)}
+                description="Estimated after key deductions."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Monthly take-home</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.monthlyTakeHome)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Better for budgeting than gross pay.
-                </p>
-              </div>
+              <ResultCard
+                icon={<ShieldCheck className="h-5 w-5" />}
+                label="Monthly take-home"
+                value={formatGBP(result.monthlyTakeHome)}
+                description="Better for budgeting than gross pay."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
@@ -285,43 +301,72 @@ export default function HourlyToSalaryPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Income tax
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.deductions.incomeTax)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    National Insurance
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.deductions.nationalInsurance)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Pension
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.deductions.pension)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Student loan
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.deductions.studentLoanRepayment)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Income tax"
+                  value={formatGBP(result.deductions.incomeTax)}
+                />
+                <SummaryBox
+                  label="National Insurance"
+                  value={formatGBP(result.deductions.nationalInsurance)}
+                />
+                <SummaryBox
+                  label="Pension"
+                  value={formatGBP(result.deductions.pension)}
+                />
+                <SummaryBox
+                  label="Student loan"
+                  value={formatGBP(result.deductions.studentLoanRepayment)}
+                />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How to convert hourly pay to annual salary
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              To estimate annual salary from hourly pay, multiply the hourly
+              rate by the number of hours worked each week, then multiply that
+              weekly amount by the number of paid weeks in the year.
+            </p>
+            <p className="leading-7">
+              For example, someone earning £15 per hour for 40 hours a week over
+              52 weeks would have a gross annual salary of £31,200 before tax,
+              National Insurance and other deductions.
+            </p>
+            <p className="leading-7">
+              The take-home estimate on this page is simplified. Actual pay can
+              vary depending on tax code, pension setup, student loan plan,
+              overtime, bonuses and payroll rules.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Hourly pay"
+              text="The rate you earn for each hour worked."
+            />
+            <InfoCard
+              title="Weekly hours"
+              text="The number of paid hours you usually work each week."
+            />
+            <InfoCard
+              title="Paid weeks"
+              text="Use 52 for year-round work, or reduce it for unpaid weeks."
+            />
           </div>
         </div>
       </section>
@@ -339,57 +384,38 @@ export default function HourlyToSalaryPage() {
                 planning.
               </p>
               <p className="leading-7">
-                This page helps bridge that gap by turning hourly pay into both
-                gross and estimated net income.
+                Use the take-home figure when checking rent affordability,
+                monthly budgets, savings goals or debt repayments.
               </p>
               <p className="leading-7">
-                Use the take-home figure when checking rent affordability,
-                monthly budgets, savings goals, or debt repayments.
+                This calculator provides a general estimate only and does not
+                provide personal financial advice or payroll advice.
               </p>
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-semibold tracking-tight">
-              Related next steps
+              Hourly to salary calculator FAQs
             </h2>
-            <div className="mt-5 space-y-3">
-              <Link
-                href="/tools/take-home-pay-calculator-uk"
-                className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100"
-              >
-                <p className="font-medium text-slate-900">
-                  Take-Home Pay Calculator UK
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Go deeper with salary-based take-home estimates.
-                </p>
-              </Link>
 
-              <Link
-                href="/tools/monthly-budget-planner"
-                className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100"
-              >
-                <p className="font-medium text-slate-900">
-                  Monthly Budget Planner
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Use your estimated monthly take-home to build a realistic
-                  budget.
-                </p>
-              </Link>
-
-              <Link
-                href="/tools/rent-affordability-calculator-uk"
-                className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100"
-              >
-                <p className="font-medium text-slate-900">
-                  Rent Affordability Calculator UK
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Check what rent range may fit your income.
-                </p>
-              </Link>
+            <div className="mt-5 space-y-4">
+              <FAQ
+                question="How do I calculate annual salary from hourly pay?"
+                answer="Multiply your hourly rate by weekly hours, then multiply that by the number of paid weeks in the year."
+              />
+              <FAQ
+                question="Should I use 52 weeks per year?"
+                answer="Use 52 if you are paid year-round. If you have unpaid weeks, reduce the weeks per year to match your situation."
+              />
+              <FAQ
+                question="Is the take-home estimate exact?"
+                answer="No. It is a simplified estimate and may differ from payroll because of tax codes, student loan plans, pension setup and other deductions."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. It gives a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -415,6 +441,117 @@ export default function HourlyToSalaryPage() {
           </div>
         </div>
       </section>
+
+      <RelatedLinks
+        heading="Related income tools"
+        links={[
+          {
+            title: "Take-Home Pay Calculator UK",
+            description:
+              "Estimate salary after income tax, National Insurance and deductions.",
+            href: "/tools/take-home-pay-calculator-uk",
+          },
+          {
+            title: "Overtime Pay Calculator",
+            description:
+              "Estimate extra pay from overtime hours and hourly rates.",
+            href: "/tools/overtime-pay-calculator",
+          },
+          {
+            title: "Monthly Budget Planner",
+            description: "Use your take-home income to build a monthly budget.",
+            href: "/tools/monthly-budget-planner",
+          },
+          {
+            title: "Rent Affordability Calculator UK",
+            description:
+              "Check what rent range may fit your monthly take-home pay.",
+            href: "/tools/rent-affordability-calculator-uk",
+          },
+        ]}
+      />
+
+      <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
