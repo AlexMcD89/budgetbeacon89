@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Rent Affordability Calculator UK | How Much Rent Can I Afford?",
   description:
-    "Use our free UK rent affordability calculator to estimate how much rent you can afford based on salary, take-home pay, bills, debts and monthly breathing room.",
+    "Use our free UK rent affordability calculator to estimate a safer rent range based on take-home pay, monthly debt, regular bills and target rent.",
   alternates: {
     canonical:
       "https://www.budgetbeacon.co.uk/tools/rent-affordability-calculator-uk",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rent Affordability Calculator UK",
     description:
-      "Estimate a realistic rent range using salary, take-home pay, debts and monthly bills.",
+      "Estimate how much rent you may be able to afford using income, debts, bills and monthly take-home pay.",
     url: "https://www.budgetbeacon.co.uk/tools/rent-affordability-calculator-uk",
     siteName: "BudgetBeacon",
     type: "website",

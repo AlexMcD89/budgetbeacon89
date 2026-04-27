@@ -2,6 +2,7 @@
 
 import RelatedLinks from "@/components/related-links";
 import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -43,10 +44,8 @@ function calculateMonthlyTakeHome(
 
   const niMainBand = Math.min(Math.max(0, annualSalary - 12570), 50270 - 12570);
   const niUpperBand = Math.max(0, annualSalary - 50270);
-
   const nationalInsurance = niMainBand * 0.08 + niUpperBand * 0.02;
 
-  // Simplified student loan estimate. Actual thresholds vary by plan.
   const studentLoanThreshold = 25000;
   const studentLoanRepayment = studentLoan
     ? Math.max(0, annualSalary - studentLoanThreshold) * 0.09
@@ -70,6 +69,7 @@ function calculateMonthlyTakeHome(
     },
   };
 }
+
 export default function RentAffordabilityCalculatorPage() {
   const [salary, setSalary] = useState(42000);
   const [partnerSalary, setPartnerSalary] = useState(0);
@@ -204,201 +204,160 @@ export default function RentAffordabilityCalculatorPage() {
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Use this UK rent affordability calculator to estimate a safer rent
               range based on your take-home pay, monthly debt, regular bills,
-              and target rent. It is designed to give general guidance and more
-              useful context than a single flat percentage.
+              and target rent. It gives more useful context than a single flat
+              percentage.
             </p>
           </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("solo")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Solo renter
-              </button>
-              <button
-                onClick={() => applyScenario("couple")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Couple
-              </button>
-              <button
-                onClick={() => applyScenario("london")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                London example
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("solo")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Solo renter
+                </button>
+                <button
+                  onClick={() => applyScenario("couple")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Couple
+                </button>
+                <button
+                  onClick={() => applyScenario("london")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  London example
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Your annual salary
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Your annual salary"
                   value={salary}
-                  onChange={(e) => setSalary(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setSalary}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Partner annual salary
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Partner annual salary"
                   value={partnerSalary}
-                  onChange={(e) => setPartnerSalary(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setPartnerSalary}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly debt payments
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly debt payments"
                   value={monthlyDebt}
-                  onChange={(e) => setMonthlyDebt(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setMonthlyDebt}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Other monthly bills
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Other monthly bills"
                   value={monthlyBills}
-                  onChange={(e) => setMonthlyBills(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setMonthlyBills}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Pension contribution %
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Pension contribution %"
                   value={pensionPct}
-                  onChange={(e) => setPensionPct(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setPensionPct}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Target monthly rent
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Target monthly rent"
                   value={targetRent}
-                  onChange={(e) => setTargetRent(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+                  onChange={setTargetRent}
                 />
               </div>
-            </div>
 
-            <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
-              <div>
-                <p className="text-sm font-medium text-slate-900">
-                  Include student loan repayments
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Turn this on if you want them included in the estimate.
-                </p>
+              <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
+                <div>
+                  <p className="text-sm font-medium text-slate-900">
+                    Include student loan repayments
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Turn this on if you want them included in the estimate.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setStudentLoan(!studentLoan)}
+                  className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
+                    studentLoan
+                      ? "bg-slate-900 text-white hover:bg-slate-800"
+                      : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  {studentLoan ? "On" : "Off"}
+                </button>
               </div>
 
-              <button
-                onClick={() => setStudentLoan(!studentLoan)}
-                className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
-                  studentLoan
-                    ? "bg-slate-900 text-white hover:bg-slate-800"
-                    : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                }`}
-              >
-                {studentLoan ? "On" : "Off"}
-              </button>
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this calculator checks
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This estimate compares your target rent with estimated
+                  take-home pay, existing monthly debt, and regular bills. It is
+                  intended as a planning guide, not financial advice.
+                </p>
+              </div>
             </div>
-            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
               <h2 className="text-xl font-semibold tracking-tight">
                 Popular next steps
               </h2>
 
               <div className="mt-4 space-y-3">
-                <Link
+                <QuickLink
                   href="/tools/take-home-pay-calculator-uk"
-                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-                >
-                  Check your take-home pay
-                </Link>
-
-                <Link
+                  label="Check your take-home pay"
+                />
+                <QuickLink
                   href="/tools/monthly-budget-planner"
-                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-                >
-                  Build a monthly budget
-                </Link>
-
-                <Link
+                  label="Build a monthly budget"
+                />
+                <QuickLink
+                  href="/tools/mortgage-affordability-calculator-uk"
+                  label="Compare with mortgage affordability"
+                />
+                <QuickLink
                   href="/guides/how-much-rent-can-i-afford-uk"
-                  className="block rounded-2xl bg-white p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-                >
-                  Read the rent affordability guide
-                </Link>
+                  label="Read the rent affordability guide"
+                />
               </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Wallet className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Estimated monthly take-home
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.monthlyIncome)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on the salary, pension, and student loan settings
-                  entered.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Wallet className="h-5 w-5" />}
+                label="Estimated monthly take-home"
+                value={formatGBP(result.monthlyIncome)}
+                description="Based on the salary, pension, and student loan settings entered."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Home className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Balanced rent estimate
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.balancedRent)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  An indicative range that may leave more monthly breathing
-                  room.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Home className="h-5 w-5" />}
+                label="Balanced rent estimate"
+                value={formatGBP(result.balancedRent)}
+                description="An indicative range that may leave more monthly breathing room."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
-                Summary
+                Rent affordability summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -416,32 +375,18 @@ export default function RentAffordabilityCalculatorPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Safer range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.safeRent)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Balanced range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.balancedRent)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Stretch range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.stretchRent)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Safer range"
+                  value={formatGBP(result.safeRent)}
+                />
+                <SummaryBox
+                  label="Balanced range"
+                  value={formatGBP(result.balancedRent)}
+                />
+                <SummaryBox
+                  label="Stretch range"
+                  value={formatGBP(result.stretchRent)}
+                />
               </div>
             </div>
 
@@ -451,29 +396,17 @@ export default function RentAffordabilityCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Target rent share</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {result.rentShare.toFixed(1)}%
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This shows how much of monthly take-home pay would go toward
-                    rent.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Target rent share"
+                  value={`${result.rentShare.toFixed(1)}%`}
+                  text="This shows how much of monthly take-home pay would go toward rent."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Estimated money left after essentials
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.moneyLeft)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This is what may be left after target rent, debt payments,
-                    and regular bills.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Estimated money left after essentials"
+                  value={formatGBP(result.moneyLeft)}
+                  text="This is what may be left after target rent, debt payments, and regular bills."
+                />
 
                 <div className="rounded-3xl bg-slate-100 p-4">
                   <p className="text-sm text-slate-500">
@@ -499,6 +432,59 @@ export default function RentAffordabilityCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How much rent can I afford in the UK?
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              A common rent affordability benchmark is to keep rent around 30%
+              to 35% of monthly take-home pay. In practice, the right rent level
+              depends on more than income alone. Debt repayments, bills,
+              commuting costs, council tax, savings goals and local living costs
+              all affect what feels affordable.
+            </p>
+
+            <p className="leading-7">
+              This calculator compares your target rent against estimated
+              take-home pay and regular monthly commitments. That makes it more
+              useful than a simple salary multiple or flat percentage rule.
+            </p>
+
+            <p className="leading-7">
+              If your rent share is high but you still have plenty of money left
+              after bills and debt payments, it may be manageable. If your rent
+              share is high and your remaining monthly buffer is low, the same
+              rent could feel much more stretched.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Safer range"
+              text="Often closer to 30% of take-home pay, leaving more room for bills, savings and unexpected costs."
+            />
+            <InfoCard
+              title="Balanced range"
+              text="A middle-ground estimate that may work for many renters if other monthly commitments are controlled."
+            />
+            <InfoCard
+              title="Stretch range"
+              text="May be possible, but usually leaves less breathing room and higher risk if costs rise."
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-6 md:px-6">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
@@ -516,9 +502,8 @@ export default function RentAffordabilityCalculatorPage() {
                 trade-offs become more significant.
               </p>
               <p className="leading-7">
-                A rent level can look affordable on paper while still feeling
-                uncomfortable in real life, especially where debt, commuting, or
-                utility bills are already high.
+                This calculator gives a general estimate only and does not
+                provide financial advice.
               </p>
             </div>
           </div>
@@ -529,44 +514,22 @@ export default function RentAffordabilityCalculatorPage() {
             </h2>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    How much of income should go on rent in the UK?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  A commonly used benchmark is around 30% to 35% of take-home
-                  pay, but debts, bills, and location can make a big difference.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Can couples use this calculator?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Yes. Adding both salaries can give a more realistic estimate
-                  of combined affordability.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Does this include bills?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Yes. The calculator separates rent from monthly bills so you
-                  can see the broader impact more clearly.
-                </p>
-              </div>
+              <FAQ
+                question="How much of income should go on rent in the UK?"
+                answer="A commonly used benchmark is around 30% to 35% of take-home pay, but debts, bills, and location can make a big difference."
+              />
+              <FAQ
+                question="Can couples use this calculator?"
+                answer="Yes. Adding both salaries can give a more realistic estimate of combined affordability."
+              />
+              <FAQ
+                question="Does this include bills?"
+                answer="Yes. The calculator separates rent from monthly bills so you can see the broader impact more clearly."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. It gives a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -594,83 +557,21 @@ export default function RentAffordabilityCalculatorPage() {
                 href="/tools/take-home-pay-calculator-uk"
                 className="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
               >
-                Take-home pay tool
+                Take-home pay
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
 
               <Link
-                href="/tools"
+                href="/tools/monthly-budget-planner"
                 className="inline-flex items-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
-                Back to all tools
+                Budget planner
               </Link>
             </div>
           </div>
         </div>
       </section>
-      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <h2 className="text-3xl font-semibold tracking-tight">
-            How much rent can I afford in the UK?
-          </h2>
 
-          <div className="mt-5 space-y-4 text-slate-600">
-            <p className="leading-7">
-              A common rent affordability benchmark is to keep rent around 30%
-              to 35% of monthly take-home pay. In practice, the right rent level
-              depends on more than income alone. Debt repayments, bills,
-              commuting costs, council tax, savings goals and the cost of living
-              in your area all affect what feels affordable.
-            </p>
-
-            <p className="leading-7">
-              This calculator is designed to give a more realistic view by
-              comparing your target rent against estimated take-home pay and
-              regular monthly commitments. That makes it more useful than a
-              simple salary multiple or flat percentage rule.
-            </p>
-
-            <p className="leading-7">
-              If your rent share is high but you still have plenty of money left
-              after bills and debt payments, it may be manageable. If your rent
-              share is high and your remaining monthly buffer is low, the same
-              rent could feel much more stretched.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl bg-slate-100 p-5">
-              <p className="text-lg font-semibold text-slate-900">
-                Safer range
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Often closer to 30% of take-home pay, leaving more room for
-                bills, savings and unexpected costs.
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-slate-100 p-5">
-              <p className="text-lg font-semibold text-slate-900">
-                Balanced range
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                A middle-ground estimate that may work for many renters if other
-                monthly commitments are controlled.
-              </p>
-            </div>
-
-            <div className="rounded-3xl bg-slate-100 p-5">
-              <p className="text-lg font-semibold text-slate-900">
-                Stretch range
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                May be possible, but usually leaves less breathing room and
-                higher risk if costs rise.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
       <RelatedLinks
         heading="Related next steps"
         links={[
@@ -703,5 +604,111 @@ export default function RentAffordabilityCalculatorPage() {
 
       <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 text-slate-900 outline-none ring-0 transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function QuickLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+    >
+      {label}
+    </Link>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+  text,
+}: {
+  label: string;
+  value: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
