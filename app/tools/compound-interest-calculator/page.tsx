@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import RelatedLinks from "@/components/related-links";
 import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -168,92 +169,137 @@ export default function CompoundInterestCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("starter")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Starter plan
-              </button>
-              <button
-                onClick={() => applyScenario("medium")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Medium plan
-              </button>
-              <button
-                onClick={() => applyScenario("aggressive")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Longer-term plan
-              </button>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("starter")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Starter plan
+                </button>
+                <button
+                  onClick={() => applyScenario("medium")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Medium plan
+                </button>
+                <button
+                  onClick={() => applyScenario("aggressive")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Longer-term plan
+                </button>
+              </div>
+
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Initial amount
+                  </label>
+                  <input
+                    type="number"
+                    value={initialAmount}
+                    onChange={(e) => setInitialAmount(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Monthly contribution
+                  </label>
+                  <input
+                    type="number"
+                    value={monthlyContribution}
+                    onChange={(e) =>
+                      setMonthlyContribution(Number(e.target.value))
+                    }
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Annual growth rate %
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={annualRate}
+                    onChange={(e) => setAnnualRate(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Years
+                  </label>
+                  <input
+                    type="number"
+                    value={years}
+                    onChange={(e) => setYears(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this calculator helps with
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Use this page to compare long-term savings paths, understand
+                  how compounding works, and see how much difference a higher
+                  monthly contribution or a longer timeframe may make.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Initial amount
-                </label>
-                <input
-                  type="number"
-                  value={initialAmount}
-                  onChange={(e) => setInitialAmount(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly contribution
-                </label>
-                <input
-                  type="number"
-                  value={monthlyContribution}
-                  onChange={(e) =>
-                    setMonthlyContribution(Number(e.target.value))
-                  }
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/isa-savings-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare with ISA savings
+                </Link>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Annual growth rate %
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={annualRate}
-                  onChange={(e) => setAnnualRate(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
+                <Link
+                  href="/tools/savings-goal-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Build a savings goal
+                </Link>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Years
-                </label>
-                <input
-                  type="number"
-                  value={years}
-                  onChange={(e) => setYears(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
-            </div>
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Find room in your monthly budget
+                </Link>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                What this calculator helps with
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Use this page to compare long-term savings paths, understand how
-                compounding works, and see how much difference a higher monthly
-                contribution or a longer timeframe may make.
-              </p>
+                <Link
+                  href="/guides/healthy-savings-rate-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Read the healthy savings guide
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -352,10 +398,6 @@ export default function CompoundInterestCalculatorPage() {
                   <p className="mt-1 text-2xl font-semibold text-slate-900">
                     {formatGBP(result.higherContributionBalance)}
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Small monthly changes may add up more than many people
-                    expect.
-                  </p>
                 </div>
 
                 <div className="rounded-3xl bg-slate-100 p-4">
@@ -364,10 +406,6 @@ export default function CompoundInterestCalculatorPage() {
                   </p>
                   <p className="mt-1 text-2xl font-semibold text-slate-900">
                     {formatGBP(result.higherRateBalance)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Over longer periods, even modest rate differences may make a
-                    noticeable difference.
                   </p>
                 </div>
               </div>
@@ -386,6 +424,58 @@ export default function CompoundInterestCalculatorPage() {
                 effect often becomes.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How compound interest can help savings grow
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              Compound interest is the process of earning growth on both your
+              original savings and the growth already added. Over longer
+              periods, this can make a noticeable difference to the final
+              balance.
+            </p>
+
+            <p className="leading-7">
+              This compound interest calculator helps you test different savings
+              scenarios by changing the starting amount, monthly contribution,
+              growth rate and timeframe. It is useful for comparing possible
+              long-term savings paths.
+            </p>
+
+            <p className="leading-7">
+              The figures are estimates only. Real savings rates and investment
+              returns can change over time, and investment values can go down as
+              well as up.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Time matters"
+              text="The longer money is left to compound, the more powerful the effect can become."
+            />
+            <InfoCard
+              title="Contributions help"
+              text="Regular monthly saving can often make a bigger difference than people expect."
+            />
+            <InfoCard
+              title="Rates can change"
+              text="Growth rates are only assumptions, so it is worth testing different scenarios."
+            />
           </div>
         </div>
       </section>
@@ -420,44 +510,22 @@ export default function CompoundInterestCalculatorPage() {
             </h2>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    What is compound interest?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  It is growth earned not only on your original amount, but also
-                  on the returns that build up over time.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    What matters more: time or rate?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Both play a role, but longer timeframes are often
-                  underestimated and may significantly affect the final outcome.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Do small monthly contributions matter?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Over longer periods, even small regular contributions may
-                  build into a much larger total due to compounding.
-                </p>
-              </div>
+              <FAQ
+                question="What is compound interest?"
+                answer="It is growth earned not only on your original amount, but also on the returns that build up over time."
+              />
+              <FAQ
+                question="What matters more: time or rate?"
+                answer="Both play a role, but longer timeframes are often underestimated and may significantly affect the final outcome."
+              />
+              <FAQ
+                question="Do small monthly contributions matter?"
+                answer="Over longer periods, even small regular contributions may build into a much larger total due to compounding."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. It is a general educational estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -532,5 +600,26 @@ export default function CompoundInterestCalculatorPage() {
 
       <ToolDisclaimer />
     </main>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
