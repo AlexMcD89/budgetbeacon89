@@ -5,10 +5,14 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarClock,
+  CircleHelp,
   PiggyBank,
   PoundSterling,
   ShieldCheck,
 } from "lucide-react";
+import RelatedLinks from "@/components/related-links";
+import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -47,6 +51,7 @@ export default function EmergencyFundCalculatorPage() {
     const gap = Math.max(0, selectedTarget - currentSavings);
     const progress =
       selectedTarget > 0 ? (currentSavings / selectedTarget) * 100 : 0;
+
     const monthsToTarget =
       monthlySaving > 0 ? Math.ceil(gap / monthlySaving) : Infinity;
 
@@ -68,7 +73,7 @@ export default function EmergencyFundCalculatorPage() {
     } else if (progress < 20) {
       status = "Early stage";
       summary =
-        "Your emergency fund is still in the early stage, so building a basic buffer should be a priority.";
+        "Your emergency fund is still in the early stage, so building a basic buffer may be useful.";
     }
 
     return {
@@ -145,7 +150,7 @@ export default function EmergencyFundCalculatorPage() {
               Savings tool
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Emergency Fund Calculator
+              Emergency Fund Calculator UK
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Estimate how much emergency savings you may need based on your
@@ -156,199 +161,175 @@ export default function EmergencyFundCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("starter")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Starter buffer
-              </button>
-              <button
-                onClick={() => applyScenario("renter")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Renter example
-              </button>
-              <button
-                onClick={() => applyScenario("family")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Family example
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("starter")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Starter buffer
+                </button>
+                <button
+                  onClick={() => applyScenario("renter")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Renter example
+                </button>
+                <button
+                  onClick={() => applyScenario("family")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Family example
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Rent / mortgage (£)
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Rent / mortgage (£)"
                   value={rentMortgage}
-                  onChange={(e) => setRentMortgage(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setRentMortgage}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Bills (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Bills (£)"
                   value={bills}
-                  onChange={(e) => setBills(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setBills}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Groceries (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Groceries (£)"
                   value={groceries}
-                  onChange={(e) => setGroceries(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setGroceries}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Transport (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Transport (£)"
                   value={transport}
-                  onChange={(e) => setTransport(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setTransport}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Debt payments (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Debt payments (£)"
                   value={debtPayments}
-                  onChange={(e) => setDebtPayments(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setDebtPayments}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Other essentials (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Other essentials (£)"
                   value={otherEssentials}
-                  onChange={(e) => setOtherEssentials(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setOtherEssentials}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Current emergency savings (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Current emergency savings (£)"
                   value={currentSavings}
-                  onChange={(e) => setCurrentSavings(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setCurrentSavings}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly saving (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly saving (£)"
                   value={monthlySaving}
-                  onChange={(e) => setMonthlySaving(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMonthlySaving}
                 />
               </div>
-            </div>
 
-            <div className="mt-6">
-              <label className="text-sm font-medium text-slate-700">
-                Emergency fund target
-              </label>
+              <div className="mt-6">
+                <label className="text-sm font-medium text-slate-700">
+                  Emergency fund target
+                </label>
 
-              <div className="mt-2 grid gap-2 sm:grid-cols-4">
-                {[3, 6, 9, 12].map((months) => (
-                  <button
-                    key={months}
-                    onClick={() => setTargetMonths(months)}
-                    className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                      targetMonths === months
-                        ? "bg-slate-900 text-white"
-                        : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                    }`}
-                  >
-                    {months} months
-                  </button>
-                ))}
+                <div className="mt-2 grid gap-2 sm:grid-cols-4">
+                  {[3, 6, 9, 12].map((months) => (
+                    <button
+                      key={months}
+                      onClick={() => setTargetMonths(months)}
+                      className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                        targetMonths === months
+                          ? "bg-slate-900 text-white"
+                          : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
+                      }`}
+                    >
+                      {months} months
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What counts as essential?
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This calculator focuses on essential costs you would still
+                  need to cover during an emergency, such as housing, bills,
+                  food, transport, and debt repayments.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                What counts as essential?
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                This calculator focuses on essential costs you would still need
-                to cover during an emergency, such as housing, bills, food,
-                transport, and debt repayments.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/savings-goal-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Build a savings goal
+                </Link>
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Find room in your monthly budget
+                </Link>
+                <Link
+                  href="/tools/debt-payoff-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare with debt payoff
+                </Link>
+                <Link
+                  href="/guides/healthy-savings-rate-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Read the healthy savings guide
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Target emergency fund
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.selectedTarget)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on {targetMonths} months of essential costs.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Target emergency fund"
+                value={formatGBP(result.selectedTarget)}
+                description={`Based on ${targetMonths} months of essential costs.`}
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <CalendarClock className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Time to target</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {result.monthsToTarget === Infinity
+              <ResultCard
+                icon={<CalendarClock className="h-5 w-5" />}
+                label="Time to target"
+                value={
+                  result.monthsToTarget === Infinity
                     ? "Not on track"
-                    : `${result.monthsToTarget} months`}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on your current monthly saving.
-                </p>
-              </div>
+                    : `${result.monthsToTarget} months`
+                }
+                description="Based on your current monthly saving."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 Emergency fund summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -373,23 +354,14 @@ export default function EmergencyFundCalculatorPage() {
               </div>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Monthly essentials
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.monthlyEssentials)}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Gap to target
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.gap)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Monthly essentials"
+                  value={formatGBP(result.monthlyEssentials)}
+                />
+                <SummaryBox
+                  label="Gap to target"
+                  value={formatGBP(result.gap)}
+                />
               </div>
             </div>
 
@@ -412,39 +384,69 @@ export default function EmergencyFundCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    To close the gap in 12 months
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.monthlyNeeded12Months)}/month
-                  </p>
-                </div>
-
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    To close the gap in 6 months
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.monthlyNeeded6Months)}/month
-                  </p>
-                </div>
+                <InfoRow
+                  label="To close the gap in 12 months"
+                  value={`${formatGBP(result.monthlyNeeded12Months)}/month`}
+                />
+                <InfoRow
+                  label="To close the gap in 6 months"
+                  value={`${formatGBP(result.monthlyNeeded6Months)}/month`}
+                />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                <PiggyBank className="h-5 w-5 text-slate-900" />
-              </div>
-              <h2 className="mt-5 text-xl font-semibold tracking-tight">
-                What this means
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">
-                An emergency fund is there to reduce pressure when income drops
-                or unexpected costs appear. Even a small starter buffer can make
-                a big difference before building towards a larger target.
-              </p>
-            </div>
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How much should an emergency fund be?
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              An emergency fund is money set aside for unexpected costs or
+              periods where income falls. Common examples include urgent car
+              repairs, replacing essential appliances, covering rent or bills
+              after job loss, or avoiding extra borrowing during a difficult
+              month.
+            </p>
+
+            <p className="leading-7">
+              Many people use 3 to 6 months of essential expenses as a starting
+              benchmark, but the right amount depends on your household, income
+              stability, debts, dependants and how quickly you could replace
+              income if needed.
+            </p>
+
+            <p className="leading-7">
+              This calculator gives a general estimate only. It does not provide
+              personal financial advice, but it can help you compare different
+              emergency fund targets and monthly saving plans.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="3 months"
+              text="Can be a useful starter buffer, especially if you are still building savings."
+            />
+            <InfoCard
+              title="6 months"
+              text="Often used as a more comfortable emergency fund target."
+            />
+            <InfoCard
+              title="12 months"
+              text="May appeal to people with irregular income, dependants or higher fixed costs."
+            />
           </div>
         </div>
       </section>
@@ -467,45 +469,33 @@ export default function EmergencyFundCalculatorPage() {
               </p>
               <p className="leading-7">
                 This calculator gives estimates only and does not provide
-                financial advice.
+                personal financial advice.
               </p>
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Emergency fund calculator FAQs
+            </h2>
+
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  How much should I have in an emergency fund?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Many people use 3 to 6 months of essential expenses as a
-                  starting benchmark, but the right amount depends on your
-                  circumstances.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Should I save before paying off debt?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  A small starter emergency fund can help avoid relying on more
-                  credit, but high-interest debt may also need attention.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Where should I keep an emergency fund?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Emergency money is usually best kept somewhere accessible and
-                  low risk, rather than locked away or exposed to large market
-                  swings.
-                </p>
-              </div>
+              <FAQ
+                question="How much should I have in an emergency fund?"
+                answer="Many people use 3 to 6 months of essential expenses as a starting benchmark, but the right amount depends on your circumstances."
+              />
+              <FAQ
+                question="Should I save before paying off debt?"
+                answer="A small starter emergency fund can help avoid relying on more credit, but high-interest debt may also need attention."
+              />
+              <FAQ
+                question="Where should I keep an emergency fund?"
+                answer="Emergency money is usually best kept somewhere accessible and low risk, rather than locked away or exposed to large market swings."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. This calculator provides a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -538,7 +528,95 @@ export default function EmergencyFundCalculatorPage() {
           </div>
         </div>
       </section>
+
+      <RelatedLinks
+        heading="Related savings tools and guides"
+        links={[
+          {
+            title: "Savings Goal Calculator",
+            description:
+              "Work out how long it could take to reach a specific savings target.",
+            href: "/tools/savings-goal-calculator",
+          },
+          {
+            title: "Monthly Budget Planner",
+            description:
+              "See how much spare money could go towards your emergency fund.",
+            href: "/tools/monthly-budget-planner",
+          },
+          {
+            title: "Healthy Savings Rate UK",
+            description:
+              "Understand how your saving level compares with your income.",
+            href: "/guides/healthy-savings-rate-uk",
+          },
+          {
+            title: "Debt Payoff Calculator",
+            description:
+              "Compare emergency saving with debt repayment planning.",
+            href: "/tools/debt-payoff-calculator",
+          },
+        ]}
+      />
+
+      <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
   );
 }
 
@@ -549,6 +627,36 @@ function TargetRow({ label, value }: { label: string; value: number }) {
       <p className="mt-1 text-2xl font-semibold text-slate-900">
         {formatGBP(value)}
       </p>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
     </div>
   );
 }
