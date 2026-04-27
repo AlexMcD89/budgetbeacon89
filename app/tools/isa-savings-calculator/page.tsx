@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import RelatedLinks from "@/components/related-links";
 import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -57,6 +58,7 @@ export default function ISASavingsCalculatorPage() {
   const [annualISAContribution, setAnnualISAContribution] = useState(3600);
 
   const result = useMemo(() => {
+    const currentISALimit = 20000;
     const annualContributionFromMonthly = monthlyContribution * 12;
     const totalAnnualContribution =
       annualContributionFromMonthly + annualISAContribution;
@@ -68,11 +70,11 @@ export default function ISASavingsCalculatorPage() {
       years,
     );
 
-    const currentISALimit = 20000;
     const remainingAllowance = Math.max(
       0,
       currentISALimit - totalAnnualContribution,
     );
+
     const overAllowance = Math.max(
       0,
       totalAnnualContribution - currentISALimit,
@@ -85,7 +87,7 @@ export default function ISASavingsCalculatorPage() {
     if (overAllowance > 0) {
       status = "Above allowance";
       summary =
-        "Your planned annual ISA contributions appear to exceed the standard annual ISA allowance, so contributions may need to be adjusted or split differently.";
+        "Your planned annual ISA contributions appear to exceed the standard annual ISA allowance, so contributions may need to be adjusted.";
     } else if (remainingAllowance < 3000) {
       status = "Close to allowance limit";
       summary =
@@ -188,146 +190,134 @@ export default function ISASavingsCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("starter")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Starter ISA
-              </button>
-              <button
-                onClick={() => applyScenario("steady")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Steady saver
-              </button>
-              <button
-                onClick={() => applyScenario("maximiser")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Bigger ISA plan
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("starter")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Starter ISA
+                </button>
+                <button
+                  onClick={() => applyScenario("steady")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Steady saver
+                </button>
+                <button
+                  onClick={() => applyScenario("maximiser")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Bigger ISA plan
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Initial amount
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Initial amount"
                   value={initialAmount}
-                  onChange={(e) => setInitialAmount(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setInitialAmount}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly contribution
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly contribution"
                   value={monthlyContribution}
-                  onChange={(e) =>
-                    setMonthlyContribution(Number(e.target.value))
-                  }
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMonthlyContribution}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Extra annual ISA contribution
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Extra annual ISA contribution"
                   value={annualISAContribution}
-                  onChange={(e) =>
-                    setAnnualISAContribution(Number(e.target.value))
-                  }
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setAnnualISAContribution}
                 />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Annual growth rate %
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
+                <InputField
+                  label="Annual growth rate %"
                   value={annualRate}
-                  onChange={(e) => setAnnualRate(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setAnnualRate}
+                  step="0.1"
                 />
+                <div className="sm:col-span-2">
+                  <InputField label="Years" value={years} onChange={setYears} />
+                </div>
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Years
-                </label>
-                <input
-                  type="number"
-                  value={years}
-                  onChange={(e) => setYears(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  About this tool
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This calculator is designed for general ISA savings planning.
+                  It uses the standard annual ISA allowance of £20,000 as a
+                  reference point and gives a simplified long-term growth
+                  estimate.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                About this tool
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                This calculator is designed for general ISA savings planning. It
-                uses the standard annual ISA allowance of £20,000 as a reference
-                point and gives a simplified long-term growth estimate.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/compound-interest-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare with compound interest
+                </Link>
+                <Link
+                  href="/tools/savings-goal-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Build a savings goal
+                </Link>
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check your monthly budget
+                </Link>
+                <Link
+                  href="/guides/healthy-savings-rate-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Read the healthy savings guide
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Projected ISA value
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.finalBalance)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Estimated end value based on the figures entered.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Projected ISA value"
+                value={formatGBP(result.finalBalance)}
+                description="Estimated end value based on the figures entered."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PiggyBank className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Growth from interest
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.totalInterest)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  The estimated value added by growth rather than deposits.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PiggyBank className="h-5 w-5" />}
+                label="Growth from interest"
+                value={formatGBP(result.totalInterest)}
+                description="The estimated value added by growth rather than deposits."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 ISA summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -345,23 +335,15 @@ export default function ISASavingsCalculatorPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Annual contribution plan
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.totalAnnualContribution)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Annual contribution plan"
+                  value={formatGBP(result.totalAnnualContribution)}
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Remaining ISA allowance
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.remainingAllowance)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Remaining ISA allowance"
+                  value={formatGBP(result.remainingAllowance)}
+                />
               </div>
             </div>
 
@@ -371,38 +353,20 @@ export default function ISASavingsCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Current setup</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.finalBalance)}
-                  </p>
-                </div>
-
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    If you added £50/month
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.nextContributionScenario.finalBalance)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    A small monthly increase may create a noticeably larger
-                    result over time.
-                  </p>
-                </div>
-
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    If growth increased by 1%
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.nextRateScenario.finalBalance)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Over longer periods, relatively modest rate differences may
-                    become more noticeable.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Current setup"
+                  value={formatGBP(result.finalBalance)}
+                />
+                <InfoRow
+                  label="If you added £50/month"
+                  value={formatGBP(
+                    result.nextContributionScenario.finalBalance,
+                  )}
+                />
+                <InfoRow
+                  label="If growth increased by 1%"
+                  value={formatGBP(result.nextRateScenario.finalBalance)}
+                />
               </div>
             </div>
 
@@ -416,9 +380,62 @@ export default function ISASavingsCalculatorPage() {
               <p className="mt-3 text-sm leading-6 text-slate-600">
                 This page uses the standard annual ISA allowance of{" "}
                 <span className="font-semibold text-slate-900">£20,000</span> as
-                a planning reference.
+                a planning reference for the current 2026/27 tax year.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How ISA savings growth works
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              An ISA lets you save or invest within an annual allowance. For the
+              2026/27 tax year, the annual ISA allowance is £20,000. This
+              calculator compares your planned monthly and annual contributions
+              with that allowance.
+              [oai_citation:0‡GOV.UK](https://www.gov.uk/lifetime-isa?utm_source=chatgpt.com)
+            </p>
+
+            <p className="leading-7">
+              The growth estimate uses a simplified compound growth calculation.
+              It assumes regular contributions and a constant annual growth
+              rate, so the final result should be treated as an illustration
+              rather than a guaranteed outcome.
+            </p>
+
+            <p className="leading-7">
+              Cash ISA rates and investment returns can change. Investment
+              values can also go down as well as up, so this page is for general
+              planning only and does not provide personal financial advice.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Allowance"
+              text="The calculator compares your planned annual contributions with the standard ISA allowance."
+            />
+            <InfoCard
+              title="Contributions"
+              text="Regular monthly contributions and one-off annual deposits both affect the projection."
+            />
+            <InfoCard
+              title="Growth"
+              text="The growth rate is only an assumption and may not reflect real future returns."
+            />
           </div>
         </div>
       </section>
@@ -441,8 +458,8 @@ export default function ISASavingsCalculatorPage() {
                 contribution plan stays within the ISA allowance.
               </p>
               <p className="leading-7">
-                Even if a plan looks modest at first, time and consistency may
-                still lead to a much larger result than many people expect.
+                This calculator gives estimates only and does not provide
+                personal financial advice.
               </p>
             </div>
           </div>
@@ -453,44 +470,22 @@ export default function ISASavingsCalculatorPage() {
             </h2>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    What is the ISA allowance?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  This calculator uses the standard annual ISA allowance of
-                  £20,000 as a planning reference.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Do I need a large amount to get started?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  No. Smaller, consistent contributions may still build over
-                  time, especially across longer periods.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Why does time matter so much?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Because compound growth tends to become more visible the
-                  longer money is left to build.
-                </p>
-              </div>
+              <FAQ
+                question="What is the ISA allowance?"
+                answer="This calculator uses the standard annual ISA allowance of £20,000 for the 2026/27 tax year as a planning reference."
+              />
+              <FAQ
+                question="Do I need a large amount to get started?"
+                answer="No. Smaller, consistent contributions may still build over time, especially across longer periods."
+              />
+              <FAQ
+                question="Why does time matter so much?"
+                answer="Because compound growth tends to become more visible the longer money is left to build."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. It provides a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -565,5 +560,94 @@ export default function ISASavingsCalculatorPage() {
 
       <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
