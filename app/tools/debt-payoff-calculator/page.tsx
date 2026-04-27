@@ -5,10 +5,14 @@ import Link from "next/link";
 import {
   ArrowRight,
   CalendarClock,
+  CircleHelp,
   CreditCard,
   PoundSterling,
   ShieldCheck,
 } from "lucide-react";
+import RelatedLinks from "@/components/related-links";
+import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -117,7 +121,7 @@ export default function DebtPayoffCalculatorPage() {
       "Your repayment plan appears to clear the debt, and the extra payment improves the payoff time.";
 
     if (currentPlan.unworkable) {
-      status = "Payment too low";
+      status = "Payment may be too low";
       summary =
         "Your current payment may not be enough to meaningfully reduce the debt because interest is taking up too much of the payment.";
     } else if (monthsSaved >= 12 || interestSaved >= 1000) {
@@ -179,7 +183,7 @@ export default function DebtPayoffCalculatorPage() {
               Debt tool
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              Debt Payoff Calculator
+              Debt Payoff Calculator UK
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Estimate how long it could take to pay off debt, how much interest
@@ -190,141 +194,144 @@ export default function DebtPayoffCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("card")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Credit card debt
-              </button>
-              <button
-                onClick={() => applyScenario("personal")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Personal loan style
-              </button>
-              <button
-                onClick={() => applyScenario("tight")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Tight payment
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("card")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Credit card debt
+                </button>
+                <button
+                  onClick={() => applyScenario("personal")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Personal loan style
+                </button>
+                <button
+                  onClick={() => applyScenario("tight")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Tight payment
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Debt balance (£)
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Debt balance (£)"
                   value={debtBalance}
-                  onChange={(e) => setDebtBalance(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setDebtBalance}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Interest rate / APR %
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
+                <InputField
+                  label="Interest rate / APR %"
                   value={apr}
-                  onChange={(e) => setApr(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setApr}
+                  step="0.1"
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly payment (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly payment (£)"
                   value={monthlyPayment}
-                  onChange={(e) => setMonthlyPayment(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMonthlyPayment}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Extra monthly payment (£)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Extra monthly payment (£)"
                   value={extraPayment}
-                  onChange={(e) => setExtraPayment(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setExtraPayment}
                 />
+
+                <div className="sm:col-span-2">
+                  <InputField
+                    label="Monthly income (£)"
+                    value={monthlyIncome}
+                    onChange={setMonthlyIncome}
+                  />
+                </div>
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly income (£)
-                </label>
-                <input
-                  type="number"
-                  value={monthlyIncome}
-                  onChange={(e) => setMonthlyIncome(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this tool helps with
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Use this calculator to compare your current payoff plan with a
+                  faster plan that includes extra monthly payments. It can help
+                  show how much time and interest extra repayments may save.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                What this tool helps with
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Use this calculator to compare your current payoff plan with a
-                faster plan that includes extra monthly payments.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/debt-snowball-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Try the debt snowball calculator
+                </Link>
+
+                <Link
+                  href="/tools/credit-card-interest-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check credit card interest
+                </Link>
+
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Find extra money in your budget
+                </Link>
+
+                <Link
+                  href="/guides/debt-snowball-vs-avalanche-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Read snowball vs avalanche guide
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <CalendarClock className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Current payoff time
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatMonths(result.currentPlan.months)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on your normal monthly payment.
-                </p>
-              </div>
+              <ResultCard
+                icon={<CalendarClock className="h-5 w-5" />}
+                label="Current payoff time"
+                value={formatMonths(result.currentPlan.months)}
+                description="Based on your normal monthly payment."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Faster payoff time
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatMonths(result.fasterPlan.months)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on your normal payment plus extra payment.
-                </p>
-              </div>
+              <ResultCard
+                icon={<ShieldCheck className="h-5 w-5" />}
+                label="Faster payoff time"
+                value={formatMonths(result.fasterPlan.months)}
+                description="Based on your normal payment plus extra payment."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 Payoff summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <CreditCard className="h-5 w-5" />
@@ -342,23 +349,15 @@ export default function DebtPayoffCalculatorPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Interest saved
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.interestSaved)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Interest saved"
+                  value={formatGBP(result.interestSaved)}
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Time saved
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatMonths(result.monthsSaved)}
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Time saved"
+                  value={formatMonths(result.monthsSaved)}
+                />
               </div>
             </div>
 
@@ -368,30 +367,20 @@ export default function DebtPayoffCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">First month interest</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.firstMonthInterest)}
-                  </p>
-                </div>
+                <InfoRow
+                  label="First month interest"
+                  value={formatGBP(result.firstMonthInterest)}
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Balance reduction with normal payment
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.currentPrincipal)}
-                  </p>
-                </div>
+                <InfoRow
+                  label="Balance reduction with normal payment"
+                  value={formatGBP(result.currentPrincipal)}
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Balance reduction with extra payment
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.fasterPrincipal)}
-                  </p>
-                </div>
+                <InfoRow
+                  label="Balance reduction with extra payment"
+                  value={formatGBP(result.fasterPrincipal)}
+                />
               </div>
             </div>
 
@@ -412,61 +401,108 @@ export default function DebtPayoffCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How debt payoff calculations work
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              Debt payoff depends mainly on your balance, interest rate and
+              monthly payment. When the interest rate is high, more of each
+              payment may go towards interest before the balance starts falling.
+            </p>
+
+            <p className="leading-7">
+              This calculator compares your current repayment plan with a faster
+              plan that includes an extra monthly payment. The difference can
+              show how much time and interest may be saved by increasing
+              repayments.
+            </p>
+
+            <p className="leading-7">
+              The figures are estimates only. Real repayment costs can vary
+              depending on lender rules, fees, promotional rates and whether
+              interest is calculated daily or monthly.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Balance matters"
+              text="A larger starting balance usually takes longer to clear and can create more total interest."
+            />
+            <InfoCard
+              title="APR matters"
+              text="Higher interest rates can make debt more expensive and slow down progress."
+            />
+            <InfoCard
+              title="Extra payments help"
+              text="Adding even a modest extra payment can reduce both time and interest."
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-6 md:px-6">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-semibold tracking-tight">
               How to use this result
             </h2>
+
             <div className="mt-5 space-y-4 text-slate-600">
               <p className="leading-7">
-                The most useful figures are payoff time, total interest, and how
+                The most useful figures are payoff time, total interest and how
                 much of your first payment actually reduces the balance.
               </p>
+
               <p className="leading-7">
                 If your payment is barely above the monthly interest, progress
                 can feel very slow. Increasing payments or lowering the interest
                 rate can make a big difference.
               </p>
+
               <p className="leading-7">
                 This calculator gives estimates only and does not provide
-                financial advice.
+                personal financial advice.
               </p>
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Debt payoff calculator FAQs
+            </h2>
+
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Why does debt take so long to clear?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  High interest can absorb a large part of each payment,
-                  especially early on when the balance is highest.
-                </p>
-              </div>
+              <FAQ
+                question="Why does debt take so long to clear?"
+                answer="High interest can absorb a large part of each payment, especially early on when the balance is highest."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Is paying extra worth it?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Often yes. Extra payments reduce the balance faster, which can
-                  lower future interest and shorten the payoff time.
-                </p>
-              </div>
+              <FAQ
+                question="Is paying extra worth it?"
+                answer="Extra payments can reduce the balance faster, which may lower future interest and shorten the payoff time."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Should I use snowball or avalanche?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Snowball focuses on smaller debts first for motivation, while
-                  avalanche targets higher-interest debts first to reduce cost.
-                </p>
-              </div>
+              <FAQ
+                question="Should I use snowball or avalanche?"
+                answer="Snowball focuses on smaller debts first for motivation, while avalanche targets higher-interest debts first to reduce cost."
+              />
+
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. It provides a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -499,6 +535,127 @@ export default function DebtPayoffCalculatorPage() {
           </div>
         </div>
       </section>
+
+      <RelatedLinks
+        heading="Related debt tools and guides"
+        links={[
+          {
+            title: "Debt Snowball Calculator",
+            description:
+              "Build a payoff order by targeting the smallest debt first.",
+            href: "/tools/debt-snowball-calculator",
+          },
+          {
+            title: "Credit Card Interest Calculator",
+            description:
+              "Estimate credit card interest and payoff time from APR and payment.",
+            href: "/tools/credit-card-interest-calculator",
+          },
+          {
+            title: "Monthly Budget Planner",
+            description:
+              "Find out how much extra money you could put towards debt.",
+            href: "/tools/monthly-budget-planner",
+          },
+          {
+            title: "Debt Snowball vs Avalanche UK",
+            description:
+              "Compare two common debt payoff methods and how they differ.",
+            href: "/guides/debt-snowball-vs-avalanche-uk",
+          },
+        ]}
+      />
+
+      <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
