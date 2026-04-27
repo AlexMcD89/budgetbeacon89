@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import RelatedLinks from "@/components/related-links";
 import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -61,10 +62,7 @@ function monthlyMortgagePayment(
   const numberOfPayments = years * 12;
 
   if (loanAmount <= 0 || years <= 0) return 0;
-
-  if (monthlyRate === 0) {
-    return loanAmount / numberOfPayments;
-  }
+  if (monthlyRate === 0) return loanAmount / numberOfPayments;
 
   return (
     (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) /
@@ -156,14 +154,14 @@ export default function MortgageAffordabilityCalculatorPage() {
     const balancedPropertyPrice = balancedLoan + deposit;
     const stretchPropertyPrice = stretchLoan + deposit;
 
-    const balancedPayment = monthlyMortgagePayment(
-      balancedLoan,
+    const safePayment = monthlyMortgagePayment(
+      safeLoan,
       interestRate,
       mortgageYears,
     );
 
-    const safePayment = monthlyMortgagePayment(
-      safeLoan,
+    const balancedPayment = monthlyMortgagePayment(
+      balancedLoan,
       interestRate,
       mortgageYears,
     );
@@ -174,12 +172,12 @@ export default function MortgageAffordabilityCalculatorPage() {
       mortgageYears,
     );
 
+    const balancedHousingShare =
+      monthlyIncome > 0 ? (balancedPayment / monthlyIncome) * 100 : 0;
+
     let status = "More comfortable range";
     let summary =
       "Based on the figures entered, this borrowing level may feel more comfortable for some households.";
-
-    const balancedHousingShare =
-      monthlyIncome > 0 ? (balancedPayment / monthlyIncome) * 100 : 0;
 
     if (
       balancedHousingShare > 38 ||
@@ -312,190 +310,183 @@ export default function MortgageAffordabilityCalculatorPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("solo")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Solo buyer
-              </button>
-              <button
-                onClick={() => applyScenario("couple")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Couple
-              </button>
-              <button
-                onClick={() => applyScenario("london")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                London example
-              </button>
-            </div>
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("solo")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Solo buyer
+                </button>
+                <button
+                  onClick={() => applyScenario("couple")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Couple
+                </button>
+                <button
+                  onClick={() => applyScenario("london")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  London example
+                </button>
+              </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Your annual salary
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <InputField
+                  label="Your annual salary"
                   value={salary}
-                  onChange={(e) => setSalary(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setSalary}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Partner annual salary
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Partner annual salary"
                   value={partnerSalary}
-                  onChange={(e) => setPartnerSalary(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setPartnerSalary}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Deposit
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Deposit"
                   value={deposit}
-                  onChange={(e) => setDeposit(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setDeposit}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Mortgage term (years)
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Mortgage term (years)"
                   value={mortgageYears}
-                  onChange={(e) => setMortgageYears(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMortgageYears}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Interest rate %
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
+                <InputField
+                  label="Interest rate %"
                   value={interestRate}
-                  onChange={(e) => setInterestRate(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setInterestRate}
+                  step="0.1"
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Pension contribution %
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Pension contribution %"
                   value={pensionPct}
-                  onChange={(e) => setPensionPct(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setPensionPct}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly debt payments
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Monthly debt payments"
                   value={monthlyDebt}
-                  onChange={(e) => setMonthlyDebt(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setMonthlyDebt}
+                />
+
+                <InputField
+                  label="Other monthly bills"
+                  value={monthlyBills}
+                  onChange={setMonthlyBills}
                 />
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Other monthly bills
-                </label>
-                <input
-                  type="number"
-                  value={monthlyBills}
-                  onChange={(e) => setMonthlyBills(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
+                <div>
+                  <p className="text-sm font-medium text-slate-900">
+                    Include student loan repayments
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Turn this on if you want them included in the estimate.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setStudentLoan(!studentLoan)}
+                  className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
+                    studentLoan
+                      ? "bg-slate-900 text-white hover:bg-slate-800"
+                      : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
+                  }`}
+                >
+                  {studentLoan ? "On" : "Off"}
+                </button>
+              </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this calculator checks
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This estimate looks at income multiples, monthly mortgage
+                  payments, deposit size, monthly debt, and essential bills. It
+                  is designed to show a practical range rather than only a
+                  maximum borrowing figure.
+                </p>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-between rounded-3xl bg-slate-100 p-4">
-              <div>
-                <p className="text-sm font-medium text-slate-900">
-                  Include student loan repayments
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Turn this on if you want them included in the estimate.
-                </p>
-              </div>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
 
-              <button
-                onClick={() => setStudentLoan(!studentLoan)}
-                className={`rounded-2xl px-4 py-2.5 text-sm font-medium transition ${
-                  studentLoan
-                    ? "bg-slate-900 text-white hover:bg-slate-800"
-                    : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                }`}
-              >
-                {studentLoan ? "On" : "Off"}
-              </button>
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/stamp-duty-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Estimate stamp duty
+                </Link>
+
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check the payment against your budget
+                </Link>
+
+                <Link
+                  href="/tools/mortgage-overpayment-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Explore mortgage overpayments
+                </Link>
+
+                <Link
+                  href="/tools/rent-affordability-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare with rent affordability
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Balanced borrowing estimate
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.balancedLoan)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  An indicative borrowing range that may feel more practical for
-                  some households.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Balanced borrowing estimate"
+                value={formatGBP(result.balancedLoan)}
+                description="An indicative borrowing range that may feel more practical for some households."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Home className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Balanced property price estimate
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.balancedPropertyPrice)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Includes the deposit entered above.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Home className="h-5 w-5" />}
+                label="Balanced property price estimate"
+                value={formatGBP(result.balancedPropertyPrice)}
+                description="Includes the deposit entered above."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
-                Summary
+                Mortgage affordability summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -513,41 +504,23 @@ export default function MortgageAffordabilityCalculatorPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Safer range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.safePropertyPrice)}
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">
-                    About {formatGBP(result.safePayment)}/month
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Safer range"
+                  value={formatGBP(result.safePropertyPrice)}
+                  note={`About ${formatGBP(result.safePayment)}/month`}
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Balanced range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.balancedPropertyPrice)}
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">
-                    About {formatGBP(result.balancedPayment)}/month
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Balanced range"
+                  value={formatGBP(result.balancedPropertyPrice)}
+                  note={`About ${formatGBP(result.balancedPayment)}/month`}
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Stretch range
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {formatGBP(result.stretchPropertyPrice)}
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">
-                    About {formatGBP(result.stretchPayment)}/month
-                  </p>
-                </div>
+                <SummaryBox
+                  label="Stretch range"
+                  value={formatGBP(result.stretchPropertyPrice)}
+                  note={`About ${formatGBP(result.stretchPayment)}/month`}
+                />
               </div>
             </div>
 
@@ -557,44 +530,23 @@ export default function MortgageAffordabilityCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Estimated monthly take-home
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.monthlyIncome)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Estimated after tax, National Insurance, pension, and
-                    optional student loan.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Estimated monthly take-home"
+                  value={formatGBP(result.monthlyIncome)}
+                  text="Estimated after tax, National Insurance, pension, and optional student loan."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Balanced housing share
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {result.balancedHousingShare.toFixed(1)}%
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This shows how much of monthly take-home pay may go toward
-                    the estimated mortgage payment.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Balanced housing share"
+                  value={`${result.balancedHousingShare.toFixed(1)}%`}
+                  text="This shows how much of monthly take-home pay may go toward the estimated mortgage payment."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Extra deposit to reach the next range
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.depositTargetForNextBand)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    A larger deposit may improve affordability by reducing
-                    borrowing and monthly payments.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Extra deposit to reach the next range"
+                  value={formatGBP(result.depositTargetForNextBand)}
+                  text="A larger deposit may improve affordability by reducing borrowing and monthly payments."
+                />
               </div>
             </div>
 
@@ -611,6 +563,58 @@ export default function MortgageAffordabilityCalculatorPage() {
                 available.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How mortgage affordability works
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              Mortgage affordability is usually based on a mix of income,
+              deposit, monthly commitments, credit profile, interest rates and
+              lender stress testing. A simple income multiple can be useful, but
+              it does not show the whole picture.
+            </p>
+
+            <p className="leading-7">
+              This calculator combines income-multiple estimates with monthly
+              repayment pressure. That means the result looks at both how much a
+              lender may consider and how the payment may feel alongside debt,
+              bills and household costs.
+            </p>
+
+            <p className="leading-7">
+              The figures are estimates only. Real mortgage offers depend on
+              lender criteria, credit checks, product fees, deposit size,
+              affordability checks and interest rates at the time you apply.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Income"
+              text="Higher household income can increase borrowing potential, but lenders also check commitments."
+            />
+            <InfoCard
+              title="Deposit"
+              text="A larger deposit reduces borrowing and can improve monthly affordability."
+            />
+            <InfoCard
+              title="Monthly costs"
+              text="Debt, bills and existing commitments can reduce what feels affordable."
+            />
           </div>
         </div>
       </section>
@@ -633,9 +637,8 @@ export default function MortgageAffordabilityCalculatorPage() {
                 comparing affordability.
               </p>
               <p className="leading-7">
-                If your target property sits above the balanced range, two
-                common ways to improve affordability are increasing your deposit
-                or reducing other monthly commitments.
+                This calculator gives estimates only and does not provide
+                personal financial advice or mortgage advice.
               </p>
             </div>
           </div>
@@ -646,45 +649,25 @@ export default function MortgageAffordabilityCalculatorPage() {
             </h2>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    How much can I borrow for a mortgage in the UK?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Many lenders use income multiples, often around 4 to 4.5 times
-                  income as a general guide, but affordability also depends on
-                  debt, bills, deposit size, and interest rates.
-                </p>
-              </div>
+              <FAQ
+                question="How much can I borrow for a mortgage in the UK?"
+                answer="Many lenders use income multiples, often around 4 to 4.5 times income as a general guide, but affordability also depends on debt, bills, deposit size, and interest rates."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Is the maximum borrowing amount always a good target?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Not usually. Borrowing at the upper end may leave less room
-                  for savings, repairs, and rising household costs.
-                </p>
-              </div>
+              <FAQ
+                question="Is the maximum borrowing amount always a good target?"
+                answer="Not usually. Borrowing at the upper end may leave less room for savings, repairs, rising household costs and future rate changes."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Does a larger deposit help?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Yes. A larger deposit reduces the amount you need to borrow
-                  and may improve both monthly affordability and lender options.
-                </p>
-              </div>
+              <FAQ
+                question="Does a larger deposit help?"
+                answer="Yes. A larger deposit reduces the amount you need to borrow and may improve both monthly affordability and lender options."
+              />
+
+              <FAQ
+                question="Is this calculator mortgage advice?"
+                answer="No. It gives a general estimate only. A broker or lender can confirm what may be available based on your circumstances."
+              />
             </div>
           </div>
         </div>
@@ -698,28 +681,29 @@ export default function MortgageAffordabilityCalculatorPage() {
                 Next step
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-                Check the rest of your numbers
+                Check the rest of your buying costs
               </h2>
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-                A useful next step is often checking your take-home pay or
-                comparing mortgage affordability with renting affordability.
+                A useful next step is estimating stamp duty, checking your
+                monthly budget, or comparing buying affordability with rent
+                affordability.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/tools/take-home-pay-calculator-uk"
+                href="/tools/stamp-duty-calculator-uk"
                 className="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
               >
-                Take-home pay
+                Stamp duty
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
 
               <Link
-                href="/tools/rent-affordability-calculator-uk"
+                href="/tools/monthly-budget-planner"
                 className="inline-flex items-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
-                Rent affordability
+                Budget planner
               </Link>
             </div>
           </div>
@@ -730,16 +714,16 @@ export default function MortgageAffordabilityCalculatorPage() {
         heading="Related housing pages"
         links={[
           {
+            title: "Stamp Duty Calculator UK",
+            description:
+              "Estimate upfront tax costs when buying property in England or Northern Ireland.",
+            href: "/tools/stamp-duty-calculator-uk",
+          },
+          {
             title: "Rent Affordability Calculator UK",
             description:
               "Compare buying affordability with renting affordability.",
             href: "/tools/rent-affordability-calculator-uk",
-          },
-          {
-            title: "Take-Home Pay Calculator UK",
-            description:
-              "Check your estimated monthly income before comparing borrowing levels.",
-            href: "/tools/take-home-pay-calculator-uk",
           },
           {
             title: "Monthly Budget Planner",
@@ -748,15 +732,122 @@ export default function MortgageAffordabilityCalculatorPage() {
             href: "/tools/monthly-budget-planner",
           },
           {
-            title: "How Much Rent Can I Afford in the UK?",
+            title: "Take-Home Pay Calculator UK",
             description:
-              "Read the housing guide for another angle on affordability.",
-            href: "/guides/how-much-rent-can-i-afford-uk",
+              "Check your estimated monthly income before comparing borrowing levels.",
+            href: "/tools/take-home-pay-calculator-uk",
           },
         ]}
       />
 
       <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  step?: string;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: string;
+  note?: string;
+}) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+      {note ? <p className="mt-2 text-xs text-slate-300">{note}</p> : null}
+    </div>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+  text,
+}: {
+  label: string;
+  value: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }

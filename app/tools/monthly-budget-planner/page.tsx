@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import RelatedLinks from "@/components/related-links";
 import ToolDisclaimer from "@/components/tool-disclaimer";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -143,193 +144,173 @@ export default function MonthlyBudgetPlannerPage() {
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Use this monthly budget planner to map your income, essential
-              spending, savings, and flexible spending in one place. It is
-              designed to help you see what feels realistic, where pressure may
-              be building, and how much room you may have left each month.
+              spending, savings, and flexible spending in one place. See what
+              feels realistic, where pressure may be building, and how much room
+              you may have left each month.
             </p>
           </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("solo")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Solo example
-              </button>
-              <button
-                onClick={() => applyScenario("couple")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Couple example
-              </button>
-              <button
-                onClick={() => applyScenario("tight")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Tight budget
-              </button>
-            </div>
-
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Monthly income
-                </label>
-                <input
-                  type="number"
-                  value={income}
-                  onChange={(e) => setIncome(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("solo")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Solo example
+                </button>
+                <button
+                  onClick={() => applyScenario("couple")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Couple example
+                </button>
+                <button
+                  onClick={() => applyScenario("tight")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Tight budget
+                </button>
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Rent / mortgage
-                </label>
-                <input
-                  type="number"
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <InputField
+                    label="Monthly income"
+                    value={income}
+                    onChange={setIncome}
+                  />
+                </div>
+
+                <InputField
+                  label="Rent / mortgage"
                   value={rent}
-                  onChange={(e) => setRent(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setRent}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Bills
-                </label>
-                <input
-                  type="number"
-                  value={bills}
-                  onChange={(e) => setBills(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
+                <InputField label="Bills" value={bills} onChange={setBills} />
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Groceries
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Groceries"
                   value={groceries}
-                  onChange={(e) => setGroceries(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setGroceries}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Transport
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Transport"
                   value={transport}
-                  onChange={(e) => setTransport(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setTransport}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Debt repayments
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Debt repayments"
                   value={debt}
-                  onChange={(e) => setDebt(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setDebt}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Savings
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Savings"
                   value={savings}
-                  onChange={(e) => setSavings(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setSavings}
                 />
-              </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Fun / entertainment
-                </label>
-                <input
-                  type="number"
+                <InputField
+                  label="Fun / entertainment"
                   value={fun}
-                  onChange={(e) => setFun(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  onChange={setFun}
                 />
+
+                <div className="sm:col-span-2">
+                  <InputField
+                    label="Other spending"
+                    value={other}
+                    onChange={setOther}
+                  />
+                </div>
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Other spending
-                </label>
-                <input
-                  type="number"
-                  value={other}
-                  onChange={(e) => setOther(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  What this planner is for
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Use this page to see whether your monthly plan appears
+                  balanced, how much room may be left after spending, and which
+                  costs are taking up the biggest share of income.
+                </p>
               </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                What this planner is for
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Use this page to see whether your monthly plan appears balanced,
-                how much room may be left after spending, and which costs are
-                taking up the biggest share of income.
-              </p>
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/take-home-pay-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check your take-home pay
+                </Link>
+
+                <Link
+                  href="/tools/rent-affordability-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Test rent affordability
+                </Link>
+
+                <Link
+                  href="/tools/emergency-fund-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Build an emergency fund target
+                </Link>
+
+                <Link
+                  href="/tools/debt-payoff-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Review debt payoff options
+                </Link>
+              </div>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Wallet className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Total outgoings</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.totalOutgoings)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Everything currently included in your monthly plan.
-                </p>
-              </div>
+              <ResultCard
+                icon={<Wallet className="h-5 w-5" />}
+                label="Total outgoings"
+                value={formatGBP(result.totalOutgoings)}
+                description="Everything currently included in your monthly plan."
+              />
 
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PiggyBank className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">Money left</p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.moneyLeft)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  What may remain after all planned monthly spending.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PiggyBank className="h-5 w-5" />}
+                label="Money left"
+                value={formatGBP(result.moneyLeft)}
+                description="What may remain after all planned monthly spending."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
-                Summary
+                Budget summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -347,35 +328,23 @@ export default function MonthlyBudgetPlannerPage() {
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Essentials
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {result.essentialsShare.toFixed(1)}%
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">Of income</p>
-                </div>
+                <SummaryBox
+                  label="Essentials"
+                  value={`${result.essentialsShare.toFixed(1)}%`}
+                  note="Of income"
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Housing
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {result.housingShare.toFixed(1)}%
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">Of income</p>
-                </div>
+                <SummaryBox
+                  label="Housing"
+                  value={`${result.housingShare.toFixed(1)}%`}
+                  note="Of income"
+                />
 
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Savings
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold">
-                    {result.savingsShare.toFixed(1)}%
-                  </p>
-                  <p className="mt-2 text-xs text-slate-300">Of income</p>
-                </div>
+                <SummaryBox
+                  label="Savings"
+                  value={`${result.savingsShare.toFixed(1)}%`}
+                  note="Of income"
+                />
               </div>
             </div>
 
@@ -385,38 +354,29 @@ export default function MonthlyBudgetPlannerPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Essential spending</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.essentials)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Rent, bills, groceries, transport, and debt repayments.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Essential spending"
+                  value={formatGBP(result.essentials)}
+                  text="Rent, bills, groceries, transport, and debt repayments."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Lifestyle spending</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.lifestyle)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Flexible spending such as fun, eating out, and other extras.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Lifestyle spending"
+                  value={formatGBP(result.lifestyle)}
+                  text="Flexible spending such as fun, eating out, and other extras."
+                />
 
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">
-                    Possible extra savings
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.possibleExtraSavings)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    This shows the approximate room available if you wanted to
-                    increase savings from the current plan.
-                  </p>
-                </div>
+                <InfoRow
+                  label="Possible extra savings"
+                  value={formatGBP(result.possibleExtraSavings)}
+                  text="Approximate room available if you wanted to increase savings from the current plan."
+                />
+
+                <InfoRow
+                  label="Suggested savings benchmark"
+                  value={formatGBP(result.recommendedSavings)}
+                  text="A simple 10% savings benchmark for comparison, not a rule."
+                />
               </div>
             </div>
 
@@ -442,6 +402,58 @@ export default function MonthlyBudgetPlannerPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How to build a monthly budget
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              A monthly budget starts with take-home income, not gross salary.
+              Once you know what actually reaches your bank account, you can
+              compare it against housing, bills, groceries, transport, debt,
+              savings and flexible spending.
+            </p>
+
+            <p className="leading-7">
+              The aim is not to create a perfect plan. A useful budget should
+              show whether your essentials are affordable, whether you have room
+              for savings, and whether the plan leaves enough flexibility for
+              irregular costs.
+            </p>
+
+            <p className="leading-7">
+              This planner gives a general estimate only. It does not provide
+              personal financial advice, but it can help you organise your
+              monthly numbers and spot pressure points.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Start with income"
+              text="Use take-home pay so your budget reflects real monthly cash flow."
+            />
+            <InfoCard
+              title="Separate essentials"
+              text="Housing, bills, food, transport and debt usually need priority."
+            />
+            <InfoCard
+              title="Leave breathing room"
+              text="A budget with no spare room can be hard to stick to."
+            />
           </div>
         </div>
       </section>
@@ -477,45 +489,25 @@ export default function MonthlyBudgetPlannerPage() {
             </h2>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    How much should I save each month?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  There is no single perfect number, but a commonly used
-                  benchmark is around 10% of income where possible.
-                </p>
-              </div>
+              <FAQ
+                question="How much should I save each month?"
+                answer="There is no single perfect number, but a commonly used benchmark is around 10% of income where possible."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    What if I am over budget?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  It may help to review larger fixed costs first, especially
-                  housing, debt, and bills, before looking at smaller flexible
-                  categories.
-                </p>
-              </div>
+              <FAQ
+                question="What if I am over budget?"
+                answer="It may help to review larger fixed costs first, especially housing, debt, and bills, before looking at smaller flexible categories."
+              />
 
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <div className="flex items-center gap-2">
-                  <CircleHelp className="h-4 w-4 text-slate-700" />
-                  <p className="font-medium text-slate-900">
-                    Should I budget from gross or take-home pay?
-                  </p>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Take-home pay is often the more useful number because it
-                  reflects what actually reaches your bank account.
-                </p>
-              </div>
+              <FAQ
+                question="Should I budget from gross or take-home pay?"
+                answer="Take-home pay is often the more useful number because it reflects what actually reaches your bank account."
+              />
+
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. This planner gives a general estimate only and should not be treated as personal financial advice."
+              />
             </div>
           </div>
         </div>
@@ -533,7 +525,7 @@ export default function MonthlyBudgetPlannerPage() {
               </h2>
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
                 This planner can work particularly well when paired with
-                take-home pay, rent, mortgage, and debt calculations.
+                take-home pay, rent, mortgage, savings, and debt calculations.
               </p>
             </div>
 
@@ -573,10 +565,10 @@ export default function MonthlyBudgetPlannerPage() {
             href: "/tools/rent-affordability-calculator-uk",
           },
           {
-            title: "Loan Repayment Calculator",
+            title: "Emergency Fund Calculator",
             description:
-              "Estimate how fixed loan repayments affect your cash flow.",
-            href: "/tools/loan-repayment-calculator",
+              "Estimate a safety buffer based on your essential monthly costs.",
+            href: "/tools/emergency-fund-calculator",
           },
           {
             title: "Healthy Savings Rate UK",
@@ -589,5 +581,109 @@ export default function MonthlyBudgetPlannerPage() {
 
       <ToolDisclaimer />
     </main>
+  );
+}
+
+function InputField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-slate-700">{label}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+      />
+    </div>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function SummaryBox({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: string;
+  note?: string;
+}) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+      {note ? <p className="mt-2 text-xs text-slate-300">{note}</p> : null}
+    </div>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+  text,
+}: {
+  label: string;
+  value: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <div className="flex items-center gap-2">
+        <CircleHelp className="h-4 w-4 text-slate-700" />
+        <p className="font-medium text-slate-900">{question}</p>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }
