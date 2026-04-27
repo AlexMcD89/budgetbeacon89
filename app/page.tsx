@@ -51,27 +51,27 @@ const categories = [
     description:
       "Salary, take-home pay, hourly pay, overtime, and side income tools.",
     icon: Wallet,
-    href: "/tools/income",
+    href: "/tools",
   },
   {
     title: "Housing",
     description:
       "Rent, mortgages, deposits, overpayments, and affordability tools.",
     icon: Home,
-    href: "/tools/housing",
+    href: "/tools",
   },
   {
     title: "Debt",
     description:
       "Debt repayment, interest cost, loan planning, and payoff tools.",
     icon: CreditCard,
-    href: "/tools/debt",
+    href: "/tools",
   },
   {
     title: "Savings",
     description: "Emergency funds, ISAs, compounding, and goal planning tools.",
     icon: PiggyBank,
-    href: "/tools/savings",
+    href: "/tools",
   },
 ];
 

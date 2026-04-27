@@ -193,14 +193,6 @@ export default function ToolsPage() {
                     <p className="mt-3 max-w-xl text-base leading-7 text-slate-600">
                       {category.description}
                     </p>
-
-                    <Link
-                      href={category.href}
-                      className="mt-6 inline-flex items-center rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-                    >
-                      View category
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2">

@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Wallet,
 } from "lucide-react";
+import AdsenseAd from "@/components/adsense-ad";
 
 function formatGBP(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -67,26 +68,16 @@ function calculateAdditionalPropertySDLT(price: number) {
 }
 
 function calculateFirstTimeBuyerSDLT(price: number) {
-  if (price > 500000) {
-    return calculateStandardSDLT(price);
-  }
-
-  if (price <= 300000) {
-    return 0;
-  }
-
+  if (price > 500000) return calculateStandardSDLT(price);
+  if (price <= 300000) return 0;
   return (price - 300000) * 0.05;
 }
 
 function calculateSDLT(price: number, buyerType: BuyerType) {
-  if (buyerType === "first-time-buyer") {
+  if (buyerType === "first-time-buyer")
     return calculateFirstTimeBuyerSDLT(price);
-  }
-
-  if (buyerType === "additional-property") {
+  if (buyerType === "additional-property")
     return calculateAdditionalPropertySDLT(price);
-  }
-
   return calculateStandardSDLT(price);
 }
 
@@ -128,10 +119,6 @@ export default function StampDutyCalculatorPage() {
         "This estimate applies higher SDLT rates for additional residential properties.";
     }
 
-    const comparisonSaving = standardStampDuty - firstTimeBuyerStampDuty;
-    const additionalPropertyExtra =
-      additionalPropertyStampDuty - standardStampDuty;
-
     return {
       stampDuty,
       standardStampDuty,
@@ -140,8 +127,8 @@ export default function StampDutyCalculatorPage() {
       mortgageNeeded,
       upfrontCashNeeded,
       effectiveRate,
-      comparisonSaving,
-      additionalPropertyExtra,
+      comparisonSaving: standardStampDuty - firstTimeBuyerStampDuty,
+      additionalPropertyExtra: additionalPropertyStampDuty - standardStampDuty,
       status,
       summary,
     };
@@ -182,152 +169,177 @@ export default function StampDutyCalculatorPage() {
             </h1>
             <p className="mt-5 text-lg leading-8 text-slate-600">
               Estimate Stamp Duty Land Tax for residential property purchases in
-              England and Northern Ireland, including first-time buyer relief
-              and additional property rates.
+              England and Northern Ireland, including first-time buyer relief,
+              main home purchases, and additional property rates.
             </p>
           </div>
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-4 pt-6 md:px-6">
+        <AdsenseAd
+          slot="1045116839"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => applyScenario("first-home")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                First home
-              </button>
-              <button
-                onClick={() => applyScenario("moving-home")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Moving home
-              </button>
-              <button
-                onClick={() => applyScenario("second-home")}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
-              >
-                Additional property
-              </button>
-            </div>
-
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Property price (£)
-                </label>
-                <input
-                  type="number"
-                  value={propertyPrice}
-                  onChange={(e) => setPropertyPrice(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
+          <div>
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => applyScenario("first-home")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  First home
+                </button>
+                <button
+                  onClick={() => applyScenario("moving-home")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Moving home
+                </button>
+                <button
+                  onClick={() => applyScenario("second-home")}
+                  className="rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
+                >
+                  Additional property
+                </button>
               </div>
 
-              <div>
-                <label className="text-sm font-medium text-slate-700">
-                  Deposit (£)
-                </label>
-                <input
-                  type="number"
-                  value={deposit}
-                  onChange={(e) => setDeposit(Number(e.target.value))}
-                  className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
-                />
-              </div>
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Property price (£)
+                  </label>
+                  <input
+                    type="number"
+                    value={propertyPrice}
+                    onChange={(e) => setPropertyPrice(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
 
-              <div className="sm:col-span-2">
-                <label className="text-sm font-medium text-slate-700">
-                  Buyer type
-                </label>
-                <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                  <button
-                    onClick={() => setBuyerType("main-home")}
-                    className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                      buyerType === "main-home"
-                        ? "bg-slate-900 text-white"
-                        : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                    }`}
-                  >
-                    Main home
-                  </button>
+                <div>
+                  <label className="text-sm font-medium text-slate-700">
+                    Deposit (£)
+                  </label>
+                  <input
+                    type="number"
+                    value={deposit}
+                    onChange={(e) => setDeposit(Number(e.target.value))}
+                    className="mt-2 h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 outline-none transition focus:border-slate-900"
+                  />
+                </div>
 
-                  <button
-                    onClick={() => setBuyerType("first-time-buyer")}
-                    className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                      buyerType === "first-time-buyer"
-                        ? "bg-slate-900 text-white"
-                        : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                    }`}
-                  >
-                    First-time buyer
-                  </button>
-
-                  <button
-                    onClick={() => setBuyerType("additional-property")}
-                    className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                      buyerType === "additional-property"
-                        ? "bg-slate-900 text-white"
-                        : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
-                    }`}
-                  >
-                    Additional property
-                  </button>
+                <div className="sm:col-span-2">
+                  <label className="text-sm font-medium text-slate-700">
+                    Buyer type
+                  </label>
+                  <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                    {[
+                      ["main-home", "Main home"],
+                      ["first-time-buyer", "First-time buyer"],
+                      ["additional-property", "Additional property"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        onClick={() => setBuyerType(value as BuyerType)}
+                        className={`rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                          buyerType === value
+                            ? "bg-slate-900 text-white"
+                            : "border border-slate-300 bg-white text-slate-900 hover:bg-slate-100"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
+
+              <div className="mt-8 rounded-3xl bg-slate-100 p-5">
+                <p className="text-sm font-medium text-slate-900">
+                  Current scope
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  This calculator is for residential purchases in England and
+                  Northern Ireland. Scotland uses LBTT and Wales uses LTT, which
+                  have different rules.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-8 rounded-3xl bg-slate-100 p-5">
-              <p className="text-sm font-medium text-slate-900">
-                Current scope
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                This calculator is for residential purchases in England and
-                Northern Ireland. Scotland uses LBTT and Wales uses LTT, which
-                have different rules.
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                Popular next steps
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                <Link
+                  href="/tools/mortgage-affordability-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Check mortgage affordability
+                </Link>
+
+                <Link
+                  href="/tools/monthly-budget-planner"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Plan your buying budget
+                </Link>
+
+                <Link
+                  href="/tools/mortgage-overpayment-calculator"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Explore mortgage overpayments
+                </Link>
+
+                <Link
+                  href="/tools/rent-affordability-calculator-uk"
+                  className="block rounded-2xl bg-slate-100 p-4 text-sm font-medium text-slate-900 transition hover:bg-slate-200"
+                >
+                  Compare with renting affordability
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold tracking-tight">
+                SDLT at a glance
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">
+                Stamp duty is banded, so the full property price is not taxed at
+                one single rate. The effective rate shown in the result is the
+                total stamp duty as a percentage of the property price.
               </p>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <PoundSterling className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Estimated stamp duty
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.stampDuty)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Based on the buyer type selected.
-                </p>
-              </div>
-
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
-                  <Wallet className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-sm text-slate-500">
-                  Upfront cash estimate
-                </p>
-                <p className="mt-2 text-3xl font-semibold tracking-tight">
-                  {formatGBP(result.upfrontCashNeeded)}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Deposit plus estimated stamp duty.
-                </p>
-              </div>
+              <ResultCard
+                icon={<PoundSterling className="h-5 w-5" />}
+                label="Estimated stamp duty"
+                value={formatGBP(result.stampDuty)}
+                description="Based on the buyer type selected."
+              />
+              <ResultCard
+                icon={<Wallet className="h-5 w-5" />}
+                label="Upfront cash estimate"
+                value={formatGBP(result.upfrontCashNeeded)}
+                description="Deposit plus estimated stamp duty."
+              />
             </div>
 
             <div className="rounded-[2rem] bg-slate-900 p-6 text-white shadow-xl md:p-8">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
                 Stamp duty summary
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
                   <ShieldCheck className="h-5 w-5" />
@@ -371,38 +383,20 @@ export default function StampDutyCalculatorPage() {
               </h2>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Standard main home</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.standardStampDuty)}
-                  </p>
-                </div>
-
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">First-time buyer</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.firstTimeBuyerStampDuty)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Potential saving vs standard:{" "}
-                    <span className="font-semibold text-slate-900">
-                      {formatGBP(Math.max(0, result.comparisonSaving))}
-                    </span>
-                  </p>
-                </div>
-
-                <div className="rounded-3xl bg-slate-100 p-4">
-                  <p className="text-sm text-slate-500">Additional property</p>
-                  <p className="mt-1 text-2xl font-semibold text-slate-900">
-                    {formatGBP(result.additionalPropertyStampDuty)}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Extra vs standard:{" "}
-                    <span className="font-semibold text-slate-900">
-                      {formatGBP(result.additionalPropertyExtra)}
-                    </span>
-                  </p>
-                </div>
+                <CompareRow
+                  label="Standard main home"
+                  value={result.standardStampDuty}
+                />
+                <CompareRow
+                  label="First-time buyer"
+                  value={result.firstTimeBuyerStampDuty}
+                  note={`Potential saving vs standard: ${formatGBP(Math.max(0, result.comparisonSaving))}`}
+                />
+                <CompareRow
+                  label="Additional property"
+                  value={result.additionalPropertyStampDuty}
+                  note={`Extra vs standard: ${formatGBP(result.additionalPropertyExtra)}`}
+                />
               </div>
             </div>
 
@@ -418,6 +412,57 @@ export default function StampDutyCalculatorPage() {
                 rate on the portion of the property price within that band.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-4 md:px-6">
+        <AdsenseAd
+          slot="1894419213"
+          className="overflow-hidden rounded-3xl bg-white"
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            How does stamp duty work in England and Northern Ireland?
+          </h2>
+
+          <div className="mt-5 space-y-4 text-slate-600">
+            <p className="leading-7">
+              Stamp Duty Land Tax, often shortened to SDLT, is a tax paid when
+              buying property or land in England and Northern Ireland. The
+              amount depends on the property price, whether you are a first-time
+              buyer, and whether the purchase is an additional property.
+            </p>
+            <p className="leading-7">
+              SDLT is calculated in bands. This means you do not usually pay one
+              flat rate on the whole property price. Instead, different parts of
+              the price are taxed at different rates.
+            </p>
+            <p className="leading-7">
+              First-time buyer relief can reduce the amount due on eligible
+              purchases, while additional residential properties usually attract
+              higher rates. Scotland and Wales have separate property tax
+              systems, so this calculator is focused on England and Northern
+              Ireland only.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <InfoCard
+              title="Main home purchase"
+              text="Uses the standard SDLT residential bands for England and Northern Ireland."
+            />
+            <InfoCard
+              title="First-time buyer"
+              text="May qualify for reduced SDLT if the property price is within the eligible relief limit."
+            />
+            <InfoCard
+              title="Additional property"
+              text="Usually attracts higher SDLT rates, often relevant for second homes or buy-to-let purchases."
+            />
           </div>
         </div>
       </section>
@@ -448,37 +493,30 @@ export default function StampDutyCalculatorPage() {
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-semibold tracking-tight">FAQs</h2>
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Where does this calculator apply?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  It applies to residential property purchases in England and
-                  Northern Ireland. Scotland and Wales use different property
-                  tax systems.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  What are the first-time buyer rules?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Eligible first-time buyers pay no SDLT up to £300,000 and 5%
-                  on the portion from £300,001 to £500,000. If the price is over
-                  £500,000, standard rates apply.
-                </p>
-              </div>
-
-              <div className="rounded-3xl bg-slate-100 p-4">
-                <p className="font-medium text-slate-900">
-                  Do additional properties cost more?
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Yes. Additional residential properties normally have higher
-                  SDLT rates than a main home purchase.
-                </p>
-              </div>
+              <FAQ
+                question="Where does this calculator apply?"
+                answer="It applies to residential property purchases in England and Northern Ireland. Scotland and Wales use different property tax systems."
+              />
+              <FAQ
+                question="What are the first-time buyer rules?"
+                answer="Eligible first-time buyers pay no SDLT up to £300,000 and 5% on the portion from £300,001 to £500,000. If the price is over £500,000, standard rates apply."
+              />
+              <FAQ
+                question="Do additional properties cost more?"
+                answer="Yes. Additional residential properties normally have higher SDLT rates than a main home purchase."
+              />
+              <FAQ
+                question="When do you pay stamp duty?"
+                answer="SDLT is normally handled as part of the purchase process, and your solicitor or conveyancer will usually submit the return and confirm the amount due."
+              />
+              <FAQ
+                question="What does effective rate mean?"
+                answer="The effective rate shows the total stamp duty as a percentage of the property price. It is an average figure, not the same as the banded SDLT rates."
+              />
+              <FAQ
+                question="Is this calculator financial advice?"
+                answer="No. This calculator gives a general estimate only. You should confirm the exact SDLT amount with your solicitor, conveyancer, or HMRC guidance."
+              />
             </div>
           </div>
         </div>
@@ -505,5 +543,68 @@ export default function StampDutyCalculatorPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ResultCard({
+  icon,
+  label,
+  value,
+  description,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100">
+        {icon}
+      </div>
+      <p className="mt-4 text-sm text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    </div>
+  );
+}
+
+function CompareRow({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: number;
+  note?: string;
+}) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-2xl font-semibold text-slate-900">
+        {formatGBP(value)}
+      </p>
+      {note ? (
+        <p className="mt-2 text-sm leading-6 text-slate-600">{note}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function InfoCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-5">
+      <p className="text-lg font-semibold text-slate-900">{title}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function FAQ({ question, answer }: { question: string; answer: string }) {
+  return (
+    <div className="rounded-3xl bg-slate-100 p-4">
+      <p className="font-medium text-slate-900">{question}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{answer}</p>
+    </div>
   );
 }

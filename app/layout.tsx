@@ -112,25 +112,25 @@ function Footer() {
                 All tools
               </Link>
               <Link
-                href="/tools/income"
+                href="/tools"
                 className="block text-sm text-slate-700 transition hover:text-slate-900"
               >
                 Income tools
               </Link>
               <Link
-                href="/tools/housing"
+                href="/tools"
                 className="block text-sm text-slate-700 transition hover:text-slate-900"
               >
                 Housing tools
               </Link>
               <Link
-                href="/tools/debt"
+                href="/tools"
                 className="block text-sm text-slate-700 transition hover:text-slate-900"
               >
                 Debt tools
               </Link>
               <Link
-                href="/tools/savings"
+                href="/tools"
                 className="block text-sm text-slate-700 transition hover:text-slate-900"
               >
                 Savings tools
@@ -249,6 +249,12 @@ export default function RootLayout({
           <div className="flex-1">{children}</div>
           <Footer />
         </div>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4223223139387700"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
